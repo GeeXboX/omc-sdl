@@ -78,6 +78,7 @@ surface_blit (SDL_Surface *screen, SDL_Surface *s, int x, int y)
   dest.y = y;
   SDL_BlitSurface (s, &src, screen, &dest);
   SDL_UpdateRect (screen, dest.x, dest.y, dest.w, dest.h);
+  SDL_Flip (screen);
 }
 
 int
