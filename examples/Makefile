@@ -2,7 +2,7 @@ CC = gcc
 CFLAGS = -Wall -g
 
 SDL_CFLAGS=`sdl-config --cflags`
-SDL_LIBS=`sdl-config --libs` -lSDL_image -lSDL_gfx
+SDL_LIBS=`sdl-config --libs` -lSDL_image -lSDL_gfx -lSDL_ttf
 
 all: crawler sdl
 

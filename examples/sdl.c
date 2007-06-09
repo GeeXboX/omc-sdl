@@ -2,6 +2,7 @@
 #include <SDL.h>
 #include <SDL_image.h>
 #include <SDL_rotozoom.h>
+#include <SDL_ttf.h>
 
 #define DEFAULT_WIDTH  1360
 #define DEFAULT_HEIGHT 760
@@ -29,20 +30,53 @@ image_load (char *filename, int w, int h)
   return img2;
 }
 
+static TTF_Font *
+font_load (char *filename, int size, int style)
+{
+  TTF_Font *font;
+  
+  if (!TTF_WasInit ())
+    TTF_Init ();
+  
+  font = TTF_OpenFont (filename, 24);
+  if (!font)
+    return NULL;
+  
+  TTF_SetFontStyle (font, style);
+
+  return font;
+}
+
+static SDL_Surface *
+text_create (TTF_Font *font, char *str, int r, int g, int b)
+{
+  SDL_Surface *txt;
+  SDL_Color color = {r, g, b, 255};
+
+  txt = TTF_RenderUTF8_Blended (font, str, color);
+  if (!txt)
+  {
+    printf (SDL_GetError());
+    return NULL;
+  }
+  
+  return txt;
+}
+
 static void
-image_blit (SDL_Surface *screen, SDL_Surface *img, int x, int y)
+surface_blit (SDL_Surface *screen, SDL_Surface *s, int x, int y)
 {
   SDL_Rect src, dest;
 
   src.x = 0;
   src.y = 0;
-  src.w = img->w;
-  src.h = img->h;
+  src.w = s->w;
+  src.h = s->h;
 
   dest = src;
   dest.x = x;
   dest.y = y;
-  SDL_BlitSurface (img, &src, screen, &dest);
+  SDL_BlitSurface (s, &src, screen, &dest);
   SDL_UpdateRect (screen, dest.x, dest.y, dest.w, dest.h);
 }
 
@@ -58,6 +92,9 @@ main (int argc, char **argv)
   Uint32 bpp;
   SDL_Surface *bg;
   SDL_Surface *logo;
+  TTF_Font *font;
+  SDL_Surface *txt;
+  int posx = 300, posy = 500;
   
   if (SDL_Init (SDL_INIT_VIDEO) < 0)
   {
@@ -120,12 +157,19 @@ main (int argc, char **argv)
 
   /* load a background image */
   bg = image_load ("back_main.png", DEFAULT_WIDTH, DEFAULT_HEIGHT);
-  image_blit (screen, bg, 0, 0);
+  surface_blit (screen, bg, 0, 0);
 
   /* load a logo image */
   logo = image_load ("logo.png", 200, -1);
-  image_blit (screen, logo, 200, 50);
+  surface_blit (screen, logo, 200, 50);
 
+  /* load a font */
+  font = font_load ("FreeSans.ttf", 24, TTF_STYLE_NORMAL);
+
+  /* display text */
+  txt = text_create (font, "SDL UTF-8 TTF test", 255, 255, 0);
+  surface_blit (screen, txt, posx, posy);
+  
   /* events handling */
   SDL_EnableKeyRepeat (SDL_DEFAULT_REPEAT_DELAY, SDL_DEFAULT_REPEAT_INTERVAL);
 
@@ -143,6 +187,26 @@ main (int argc, char **argv)
         printf ("Quit\n");
         goto sdl_quit;
       }
+      else if (keysym.sym == SDLK_UP)
+      {
+        posy -= 3;
+        surface_blit (screen, txt, posx, posy);
+      }
+      else if (keysym.sym == SDLK_DOWN)
+      {
+        posy += 3;
+        surface_blit (screen, txt, posx, posy);
+      }
+      else if (keysym.sym == SDLK_LEFT)
+      {
+        posx -= 3;
+        surface_blit (screen, txt, posx, posy);
+      }
+      else if (keysym.sym == SDLK_RIGHT)
+      {
+        posx += 3;
+        surface_blit (screen, txt, posx, posy);
+      }
       break;
 
     case SDL_QUIT:
@@ -153,6 +217,8 @@ main (int argc, char **argv)
 
  sdl_quit:
   SDL_FreeSurface (bg);
+  TTF_CloseFont (font);
+  TTF_Quit ();
   SDL_Quit ();
   return 0;
 }
