@@ -191,21 +191,29 @@ main (int argc, char **argv)
       else if (keysym.sym == SDLK_UP)
       {
         posy -= 3;
+        surface_blit (screen, bg, 0, 0);
+        surface_blit (screen, logo, 200, 50);
         surface_blit (screen, txt, posx, posy);
       }
       else if (keysym.sym == SDLK_DOWN)
       {
         posy += 3;
+        surface_blit (screen, bg, 0, 0);
+        surface_blit (screen, logo, 200, 50);
         surface_blit (screen, txt, posx, posy);
       }
       else if (keysym.sym == SDLK_LEFT)
       {
         posx -= 3;
+        surface_blit (screen, bg, 0, 0);
+        surface_blit (screen, logo, 200, 50);
         surface_blit (screen, txt, posx, posy);
       }
       else if (keysym.sym == SDLK_RIGHT)
       {
         posx += 3;
+        surface_blit (screen, bg, 0, 0);
+        surface_blit (screen, logo, 200, 50);
         surface_blit (screen, txt, posx, posy);
       }
       break;
