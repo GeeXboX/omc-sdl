@@ -253,7 +253,7 @@ main (int argc, char **argv)
   AVFormatContext *pFormatCtx;
   char *md5sum;
   
-  if (argc < 1)
+  if (argc < 2)
   {
     printf ("usage: %s media_filename\n", argv[0]);
     return -1;
