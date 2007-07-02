@@ -85,7 +85,7 @@ startElementGenre(void *userData, const char *name, const char **attr) {
   int i;
 
   // <genre name='name'...>
-  if(!strncmp(name, "genre", 7)) {
+  if(!strncmp(name, "genre", 5)) {
     for (i = 0; attr[i]; i += 2) {
       if(!strncmp(attr[i], "name", 4)){
         printf("%s\n", attr[i+1]);
