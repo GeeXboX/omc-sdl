@@ -1,0 +1,94 @@
+## common Makefile
+##
+## omc - (c) 2006 Alexis Saettler
+##
+
+CONFIGMAK := $(SRCDIR)/config.mak
+ifeq (,$(wildcard $(CONFIGMAK)))
+  $(error "$(CONFIGMAK) is not present, run configure !")
+endif
+include $(CONFIGMAK)
+
+OBJS := $(SRCS:.c=.o)
+CFLAGS += $(OPTFLAGS)
+CFLAGS += -I.
+CFLAGS += -I$(SRCDIR)
+
+##
+## default target
+##
+all:: $(SUBDIRS)
+$(SUBDIRS)::
+	$(MAKE) -C $@
+
+.PHONY: all $(SUBDIRS)
+
+
+##
+## CLEAN targets
+##
+clean-subdirs := $(addprefix _clean_,$(SUBDIRS))
+$(clean-subdirs):
+	$(MAKE) -C $(patsubst _clean_%,%,$@) clean
+clean:: $(clean-subdirs)
+
+ifneq (,$(OBJS))
+clean::
+	$(RM) $(OBJS)
+endif
+
+distclean-subdirs := $(addprefix _distclean_,$(SUBDIRS))
+$(distclean-subdirs):
+	$(MAKE) -C $(patsubst _distclean_%,%,$@) distclean
+distclean:: $(distclean-subdirs)
+
+# Add clean target to distclean
+distclean:: clean
+
+.PHONY: clean $(clean-subdirs) distclean $(distclean-subdirs)
+
+
+##
+## INSTALL targets
+##
+install-subdirs := $(addprefix _install_,$(SUBDIRS))
+$(install-subdirs):
+	$(MAKE) -C $(patsubst _install_%,%,$@) install
+install:: $(install-subdirs)
+
+uninstall-subdirs := $(addprefix _uninstall_,$(SUBDIRS))
+$(uninstall-subdirs):
+	$(MAKE) -C $(patsubst _uninstall_%,%,$@) uninstall
+uninstall:: $(uninstall-subdirs)
+
+.PHONY: install $(install-subdirs) uninstall $(uninstall-subdirs)
+
+
+##
+## Common targets
+##
+%.o:: %.c
+	$(CC) -c $(CFLAGS) -o $@ $<
+
+$(LIBNAME)::%.a: $(OBJS)
+	$(AR) r $@ $(OBJS)
+	$(RANLIB) $@
+
+
+##
+## DEPEND target
+##
+depend:: .depend
+.depend: $(SRCS)
+	$(CC) -MM $(CFLAGS) $(SRCS) 1>$@
+
+#
+# include dependency files if they exist
+#
+ifneq (,$(wildcard .depend))
+include .depend
+clean::
+	$(RM) .depend
+endif
+
+.PHONY: depend

@@ -1,0 +1,4 @@
+syntax: regexp
+^config.log
+^config.h
+^config.mak
