@@ -1,13 +1,14 @@
 SRCDIR := ..
-SUBDIRS := 
+SUBDIRS := widgets
 
 BIN_NAME := omc
 
 SRCS := \
 	omc.c \
-	
-DEP_LIBS :=
-	
+
+DEP_LIBS := \
+	widgets/widgets.a \
+
 include $(SRCDIR)/Makefile.common
 
 EXTRALIBS += $(DEP_LIBS)
