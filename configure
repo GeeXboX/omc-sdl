@@ -567,7 +567,7 @@ fi
 #   check for SDL
 #################################################
 echolog "Checking for libsdl ..."
-evasconfig="/usr/bin/evas-config"
+sdlconfig="/usr/bin/sdl-config"
 [ -n "$sdlprefix" ] && sdlconfig="$sdlprefix/bin/sdl-config"
 check_libconfig $sdlconfig sdl_init ||
 {
