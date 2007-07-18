@@ -5,6 +5,7 @@ LIBNAME := widgets.a
 
 SRCS := \
 	widget.c \
+	image.c \
 
 include $(SRCDIR)/Makefile.common
 

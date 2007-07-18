@@ -24,7 +24,8 @@
 
 typedef enum widget_type {
   WIDGET_TYPE_UNKNOWN,
-  WIDGET_TYPE_TEXT
+  WIDGET_TYPE_IMAGE,
+  WIDGET_TYPE_TEXT,
 } widget_type_t;
 
 typedef enum widget_flags {
@@ -119,5 +120,9 @@ void neighbours_free (neighbours_t *nb);
 /* void widget_focus_free (widget_focus_t *focus); */
 /* int widget_focus_add_action (widget_focus_t *focus, widget_action_t *action); */
 /* int widget_move_focus (widget_t *widget, neighbours_type_t where); */
+
+widget_t *image_new (char *id, int focusable, int show, int layer,
+                     char *name, char *fname,
+                     int x, int y, int w, int h);
 
 #endif /* _WIDGET_H_ */

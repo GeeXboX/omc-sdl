@@ -20,10 +20,14 @@
 #include <stdio.h>
 #include <SDL/SDL.h>
 
+#include "widgets/widget.h"
+
 #define DEFAULT_WIDTH  1280
 #define DEFAULT_HEIGHT 720
 #define DEFAULT_DEPTH  24
 #define DEFAULT_WM_CAPTION "GeeXboX Open Media Center"
+
+SDL_Surface *screen;
 
 int
 main (int argc, char **argv)
@@ -32,9 +36,10 @@ main (int argc, char **argv)
   char vo_driver[128];
   int flags = SDL_SWSURFACE;
   SDL_Rect **modes;
-  SDL_Surface *screen;
   SDL_Event event;
   Uint32 bpp;
+
+  widget_t *bg = NULL;
   
   if (SDL_Init (SDL_INIT_VIDEO) < 0)
   {
@@ -91,6 +96,11 @@ main (int argc, char **argv)
   if (vi->wm_available)
     SDL_WM_SetCaption (DEFAULT_WM_CAPTION, NULL);
 
+  bg = image_new ("background", 0, 1, 1, "data/background.png", NULL,
+                  0, 0, -1, -1);
+  widget_show (bg);
+  SDL_Flip (screen);
+  
   /* events handling */
   SDL_EnableKeyRepeat (SDL_DEFAULT_REPEAT_DELAY, SDL_DEFAULT_REPEAT_INTERVAL);
 
@@ -112,6 +122,7 @@ main (int argc, char **argv)
   }
 
  sdl_quit:
+  widget_free (bg);
   SDL_Quit ();
   return 0;
 }
