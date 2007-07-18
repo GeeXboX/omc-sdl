@@ -115,7 +115,8 @@ main (int argc, char **argv)
       keysym = event.key.keysym;
       if (keysym.sym == SDLK_q)
         goto sdl_quit;
-
+      break;
+      
     case SDL_QUIT:
       goto sdl_quit;
     }
