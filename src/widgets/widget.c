@@ -57,7 +57,7 @@ int
 widget_show (widget_t *widget)
 {
   if (widget && widget->show)
-    if (!(widget->flags & WIDGET_FLAG_SHOW)) /* current state: hidden */
+    //if (!(widget->flags & WIDGET_FLAG_SHOW)) /* current state: hidden */
       return widget->show (widget);
 
   return -1;
@@ -67,7 +67,7 @@ int
 widget_hide (widget_t *widget)
 {
   if (widget && widget->hide)
-    if (widget->flags & WIDGET_FLAG_SHOW) /* current state: displayed */
+    //if (widget->flags & WIDGET_FLAG_SHOW) /* current state: displayed */
       return widget->hide (widget);
 
   return -1;
