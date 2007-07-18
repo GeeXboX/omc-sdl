@@ -569,7 +569,7 @@ fi
 echolog "Checking for libsdl ..."
 sdlconfig="/usr/bin/sdl-config"
 [ -n "$sdlprefix" ] && sdlconfig="$sdlprefix/bin/sdl-config"
-check_libconfig $sdlconfig sdl_init ||
+check_libconfig $sdlconfig SDL_Init ||
 {
   if [ -n "$sdlprefix" ]; then
     check_cflags -I$sdlprefix/include
