@@ -99,6 +99,11 @@ main (int argc, char **argv)
   bg = image_new ("background", 0, 1, 1, "data/background.png", NULL,
                   0, 0, -1, -1);
   widget_show (bg);
+
+  bg = image_new ("banner-top", 0, 1, 1, "data/banner-top.png", NULL,
+                  0, 0, -1, -1);
+  widget_show (bg);
+
   SDL_Flip (screen);
   
   /* events handling */
