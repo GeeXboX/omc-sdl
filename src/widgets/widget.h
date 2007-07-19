@@ -125,4 +125,9 @@ widget_t *image_new (char *id, int focusable, int show, int layer,
                      char *name, char *fname,
                      int x, int y, int w, int h);
 
+widget_t *text_new (char *id, int focusable, int show, int layer,
+                    char *name, char *fontname, int size,
+                    int r, int g, int b,
+                    int x, int y, int w, int h);
+
 #endif /* _WIDGET_H_ */

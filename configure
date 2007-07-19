@@ -602,6 +602,19 @@ echolog "Checking for libsdl_gfx ..."
   check_lib SDL/SDL_rotozoom.h zoomSurface -lSDL_gfx;
 } || die "Error, can't find libsdl_gfx !"
 
+
+#################################################
+#   check for SDL_ttf
+#################################################
+echolog "Checking for libsdl_ttf ..."
+{
+  if [ -n "$sdlprefix" ]; then
+    check_cflags -I$sdlprefix/include
+    check_ldflags -L$sdlprefix/lib
+  fi
+  check_lib SDL/SDL_ttf.h TTF_OpenFont -lSDL_ttf;
+} || die "Error, can't find libsdl_ttf !"
+
 #################################################
 #   check for libcurl
 #################################################
