@@ -34,7 +34,7 @@ font_load (char *filename, int size, int style)
   if (!TTF_WasInit ())
     TTF_Init ();
 
-  font = TTF_OpenFont (filename, 24);
+  font = TTF_OpenFont (filename, size);
   if (!font)
     return NULL;
 
