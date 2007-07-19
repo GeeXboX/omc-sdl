@@ -126,6 +126,7 @@ widget_text_free (widget_t *widget)
 widget_t *
 text_new (char *id, int focusable, int show, int layer,
            char *name, char *fontname, int size,
+           int r, int g, int b,
            int x, int y, int w, int h)
 {
   TTF_Font *font;
@@ -142,7 +143,7 @@ text_new (char *id, int focusable, int show, int layer,
   priv = malloc (sizeof (widget_text_t));
   printf ("Loading \"%s\"\n", name);
   font = font_load (fontname, size, TTF_STYLE_NORMAL);
-  priv->txt = text_create (font, name, 255, 255, 0);
+  priv->txt = text_create (font, name, r, g, b);
 
   widget->priv = priv;
 

@@ -105,11 +105,11 @@ main (int argc, char **argv)
   widget_show (bg);
 
   bg = text_new("playdvd-caption", 0, 1, 2, "Play DVD", "examples/FreeSans.ttf", 24,
-                300, 300, -1, -1);
+                0x33, 0x85, 0xF4, 300, 300, -1, -1);
   widget_show (bg);
 
   bg = text_new("watchtv-caption", 0, 1, 2, "Watch TV", "examples/FreeSans.ttf", 24,
-                300, 350, -1, -1);
+                0x33, 0x85, 0xF4, 300, 350, -1, -1);
   widget_show (bg);
 
   SDL_Flip (screen);
