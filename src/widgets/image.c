@@ -18,8 +18,8 @@
  */
 
 #include <stdlib.h>
-#include <SDL/SDL_image.h>
-#include <SDL/SDL_rotozoom.h>
+#include <SDL_image.h>
+#include <SDL_rotozoom.h>
 
 #include "widget.h"
 

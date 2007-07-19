@@ -575,7 +575,7 @@ check_libconfig $sdlconfig SDL_Init ||
     check_cflags -I$sdlprefix/include
     check_ldflags -L$sdlprefix/lib
   fi
-  check_lib SDL/SDL.h SDL_Init -lSDL;
+  check_lib SDL.h SDL_Init -lSDL;
 } || die "Error, can't find libsdl !"
 
 #################################################
@@ -587,7 +587,7 @@ echolog "Checking for libsdl_image ..."
     check_cflags -I$sdlprefix/include
     check_ldflags -L$sdlprefix/lib
   fi
-  check_lib SDL/SDL_image.h IMG_Load -lSDL_image;
+  check_lib SDL_image.h IMG_Load -lSDL_image;
 } || die "Error, can't find libsdl_image !"
 
 #################################################
@@ -599,7 +599,7 @@ echolog "Checking for libsdl_gfx ..."
     check_cflags -I$sdlprefix/include
     check_ldflags -L$sdlprefix/lib
   fi
-  check_lib SDL/SDL_rotozoom.h zoomSurface -lSDL_gfx;
+  check_lib SDL_rotozoom.h zoomSurface -lSDL_gfx;
 } || die "Error, can't find libsdl_gfx !"
 
 
@@ -612,7 +612,7 @@ echolog "Checking for libsdl_ttf ..."
     check_cflags -I$sdlprefix/include
     check_ldflags -L$sdlprefix/lib
   fi
-  check_lib SDL/SDL_ttf.h TTF_OpenFont -lSDL_ttf;
+  check_lib SDL_ttf.h TTF_OpenFont -lSDL_ttf;
 } || die "Error, can't find libsdl_ttf !"
 
 #################################################
