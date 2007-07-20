@@ -20,6 +20,7 @@
 #include <stdio.h>
 #include <SDL.h>
 
+#include "display.h"
 #include "widgets/widget.h"
 
 #define DEFAULT_WIDTH  1280
@@ -96,6 +97,9 @@ main (int argc, char **argv)
   if (vi->wm_available)
     SDL_WM_SetCaption (DEFAULT_WM_CAPTION, NULL);
 
+  /* background thread that handles display and rendering */
+  create_display_thread ();
+  
   bg = image_new ("background", 0, 1, 1, "data/background.png", NULL,
                   0, 0, -1, -1);
   widget_show (bg);
@@ -111,9 +115,7 @@ main (int argc, char **argv)
   bg = text_new("watchtv-caption", 0, 1, 2, "Watch TV", "examples/FreeSans.ttf", 24,
                 0x33, 0x85, 0xF4, 300, 350, -1, -1);
   widget_show (bg);
-
-  SDL_Flip (screen);
-  
+ 
   /* events handling */
   SDL_EnableKeyRepeat (SDL_DEFAULT_REPEAT_DELAY, SDL_DEFAULT_REPEAT_INTERVAL);
 
