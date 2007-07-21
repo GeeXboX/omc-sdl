@@ -26,6 +26,10 @@
 
 typedef struct widget_text_s {
   SDL_Surface *txt;     /* regular text */
+  SDL_Color color;
+  SDL_Color fcolor;
+  TTF_Font *font;
+  char *str;
 } widget_text_t;
 
 static TTF_Font *
@@ -46,10 +50,9 @@ font_load (char *filename, int size, int style)
 }
 
 static SDL_Surface *
-text_create (TTF_Font *font, char *str, int r, int g, int b)
+text_create (TTF_Font *font, char *str, SDL_Color color)
 {
   SDL_Surface *txt;
-  SDL_Color color = {r, g, b, 255};
 
   txt = TTF_RenderUTF8_Blended (font, str, color);
   if (!txt)
@@ -93,21 +96,29 @@ widget_text_free (widget_t *widget)
 
   if (priv->txt)
     SDL_FreeSurface (priv->txt);
+
+  if (priv->font)
+    TTF_CloseFont (priv->font);
+
+  if (priv->str)
+    free (priv->str);
+  
   free (priv);
 }
 
 widget_t *
 text_new (char *id, int focusable, int show, int layer,
            char *name, char *fontname, int size,
-           int r, int g, int b,
+           int r, int g, int b, int rf, int gf, int bf,
            int x, int y, int w, int h)
 {
-  TTF_Font *font;
-
   widget_t *widget = NULL;
   widget_text_t *priv = NULL;
   int flags = WIDGET_FLAG_NONE;
 
+  if (!fontname || !name)
+    return NULL;
+  
   if (show)
     flags |= WIDGET_FLAG_SHOW;
 
@@ -118,8 +129,20 @@ text_new (char *id, int focusable, int show, int layer,
 
   priv = malloc (sizeof (widget_text_t));
   printf ("Loading \"%s\"\n", name);
-  font = font_load (fontname, size, TTF_STYLE_NORMAL);
-  priv->txt = text_create (font, name, r, g, b);
+  priv->font = font_load (fontname, size, TTF_STYLE_NORMAL);
+
+  priv->color.r = r;
+  priv->color.g = g;
+  priv->color.b = b;
+  priv->color.unused = 255;
+
+  priv->fcolor.r = rf;
+  priv->fcolor.g = gf;
+  priv->fcolor.b = bf;
+  priv->fcolor.unused = 255;
+  
+  priv->str = strdup (name);
+  priv->txt = text_create (priv->font, priv->str, priv->color);
 
   widget->priv = priv;
 

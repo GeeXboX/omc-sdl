@@ -75,11 +75,11 @@ screen_main_init (screen_t *screen)
 
   txt1 = text_new ("playdvd-caption", 1, 1, 2, "Play DVD",
                    "examples/FreeSans.ttf", 24,
-                   0x33, 0x85, 0xF4, 300, 300, -1, -1);
+                   0x33, 0x85, 0xF4, 0x62, 0x23, 0x4E, 300, 300, -1, -1);
   screen_add_widget (screen, txt1);
 
   txt2 = text_new ("watchtv-caption", 0, 1, 2, "Watch TV",
                    "examples/FreeSans.ttf", 24,
-                   0x33, 0x85, 0xF4, 300, 350, -1, -1);
+                   0x33, 0x85, 0xF4, 0, 0, 0, 300, 350, -1, -1);
   screen_add_widget (screen, txt2);
 }
