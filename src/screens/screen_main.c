@@ -20,8 +20,29 @@
 #include <string.h>
 #include <stdlib.h>
 
+#include "event.h"
 #include "screen.h"
 #include "widgets/widget.h"
+
+static int
+screen_main_event_handler (screen_t *screen, SDL_Event *ev)
+{
+  SDL_keysym keysym;
+
+  switch (ev->type)
+  {
+  case SDL_KEYDOWN : /* Keyboard Events */
+    keysym = ev->key.keysym;
+    if (keysym.sym == SDLK_a)
+    {
+      printf ("Stroke the A key\n");
+      return 0;
+    }
+  }
+
+  /* fall back to generic event handler */
+  return default_event_handler (ev);
+}
 
 static void
 screen_main_uninit (screen_t *screen)
@@ -40,7 +61,7 @@ screen_main_init (screen_t *screen)
   if (!screen)
     return;
 
-  /* set unregister */
+  screen->handle_event = screen_main_event_handler;
   screen->uninit = screen_main_uninit;
 
   /* populate screen */
