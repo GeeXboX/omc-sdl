@@ -58,7 +58,7 @@ static int
 surface_blit (widget_t *widget, int x, int y)
 {
   widget_image_t *priv = (widget_image_t *) widget->priv;
-  extern SDL_Surface *screen;
+  extern SDL_Surface *display;
   SDL_Surface *srf;
   SDL_Rect src, dest;
   
@@ -79,8 +79,8 @@ surface_blit (widget_t *widget, int x, int y)
   dest.x = widget->x;
   dest.y = widget->y;
 
-  SDL_BlitSurface (srf, &src, screen, &dest);
-  SDL_UpdateRect (screen, dest.x, dest.y, dest.w, dest.h);
+  SDL_BlitSurface (srf, &src, display, &dest);
+  SDL_UpdateRect (display, dest.x, dest.y, dest.w, dest.h);
 
   return 0;
 }

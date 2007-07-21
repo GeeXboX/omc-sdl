@@ -29,7 +29,7 @@
 #define DEFAULT_DEPTH  24
 #define DEFAULT_WM_CAPTION "GeeXboX Open Media Center"
 
-SDL_Surface *screen;
+SDL_Surface *display;
 screen_t *scr = NULL;
 SDL_Thread *dth = NULL;
 
@@ -103,7 +103,7 @@ main (int argc, char **argv)
   }
 
   printf ("SDL Recommends %dx%d@%d\n", DEFAULT_WIDTH, DEFAULT_HEIGHT, bpp);
-  screen = SDL_SetVideoMode (DEFAULT_WIDTH, DEFAULT_HEIGHT, bpp, flags);
+  display = SDL_SetVideoMode (DEFAULT_WIDTH, DEFAULT_HEIGHT, bpp, flags);
 
   if (vi->wm_available)
     SDL_WM_SetCaption (DEFAULT_WM_CAPTION, NULL);

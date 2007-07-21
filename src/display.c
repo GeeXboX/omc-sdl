@@ -46,7 +46,7 @@ time_left (void)
 int
 display_handler (void *data)
 {
-  extern SDL_Surface *screen;
+  extern SDL_Surface *display;
   extern screen_t *scr;
   
   next_time = SDL_GetTicks() + TICK_INTERVAL;
@@ -62,7 +62,7 @@ display_handler (void *data)
     }    
 
     /* flip screen for double buffering */
-    SDL_Flip (screen);
+    SDL_Flip (display);
 
     /* wait for next interval */
     SDL_Delay (time_left ());
