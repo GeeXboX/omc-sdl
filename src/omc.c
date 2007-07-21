@@ -104,7 +104,6 @@ main (int argc, char **argv)
   /* init main screen */
   screen_init (SCREEN_TYPE_MAIN);
 
-
   /* events handling */
   SDL_EnableKeyRepeat (SDL_DEFAULT_REPEAT_DELAY, SDL_DEFAULT_REPEAT_INTERVAL);
 
