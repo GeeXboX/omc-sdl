@@ -20,6 +20,7 @@
 #include <stdlib.h>
 #include <string.h>
 
+#include "omc.h"
 #include "screen.h"
 #include "widgets/widget.h"
 
@@ -58,7 +59,6 @@ void
 screen_init (screen_type_t type)
 {
   screen_t *screen;
-  extern screen_t *scr;
   extern void * screen_main_init (screen_t *screen);
 
   screen = malloc (sizeof (screen_t));
@@ -75,16 +75,14 @@ screen_init (screen_type_t type)
   }
 
   /* new current screen */
-  scr = screen;
+  omc->scr = screen;
 }
 
 void
 screen_switch (screen_type_t type)
 {
-  extern screen_t *scr;
-
-  if (scr)
-    screen_uninit (scr);
+  if (omc->scr)
+    screen_uninit (omc->scr);
 
   screen_init (type);
 }

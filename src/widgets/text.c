@@ -20,6 +20,7 @@
 #include <stdlib.h>
 #include <SDL_ttf.h>
 
+#include "omc.h"
 #include "widget.h"
 
 typedef struct widget_text_s {
@@ -47,7 +48,6 @@ static int
 surface_blit (widget_t *widget, int x, int y)
 {
   widget_text_t *priv = (widget_text_t *) widget->priv;
-  extern SDL_Surface *display;
   SDL_Surface *srf;
   SDL_Rect src, dest;
 
@@ -68,8 +68,8 @@ surface_blit (widget_t *widget, int x, int y)
   dest.x = widget->x;
   dest.y = widget->y;
 
-  SDL_BlitSurface (srf, &src, display, &dest);
-  SDL_UpdateRect (display, dest.x, dest.y, dest.w, dest.h);
+  SDL_BlitSurface (srf, &src, omc->display, &dest);
+  SDL_UpdateRect (omc->display, dest.x, dest.y, dest.w, dest.h);
 
   return 0;
 }

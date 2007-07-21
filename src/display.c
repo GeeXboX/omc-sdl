@@ -20,6 +20,7 @@
 #include <SDL.h>
 #include <SDL_thread.h>
 
+#include "omc.h"
 #include "display.h"
 #include "screens/screen.h"
 #include "widgets/widget.h"
@@ -46,23 +47,20 @@ time_left (void)
 int
 display_handler (void *data)
 {
-  extern SDL_Surface *display;
-  extern screen_t *scr;
-  
   next_time = SDL_GetTicks() + TICK_INTERVAL;
   
   while (1)
   {
     /* update screen composition (i.e. blit surfaces) */
-    if (scr)
+    if (omc->scr)
     {
       widget_t **widgets;
-      for (widgets = scr->wlist; *widgets; widgets++)
+      for (widgets = omc->scr->wlist; *widgets; widgets++)
         widget_show (*widgets);
     }    
 
     /* flip screen for double buffering */
-    SDL_Flip (display);
+    SDL_Flip (omc->display);
 
     /* wait for next interval */
     SDL_Delay (time_left ());
@@ -72,11 +70,9 @@ display_handler (void *data)
   return 0;
 }
 
-SDL_Thread *
+void
 create_display_thread (void)
 {
-  SDL_Thread *th_display;
-  th_display = SDL_CreateThread (display_handler, NULL);
-
-  return th_display;
+  if (!omc->dth)
+    omc->dth = SDL_CreateThread (display_handler, NULL);
 }

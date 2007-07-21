@@ -20,6 +20,7 @@
 #include <stdio.h>
 #include <SDL.h>
 
+#include "omc.h"
 #include "display.h"
 #include "widgets/widget.h"
 #include "screens/screen.h"
@@ -29,18 +30,27 @@
 #define DEFAULT_DEPTH  24
 #define DEFAULT_WM_CAPTION "GeeXboX Open Media Center"
 
-SDL_Surface *display;
-screen_t *scr = NULL;
-SDL_Thread *dth = NULL;
+void
+omc_init (void)
+{
+  omc = malloc (sizeof (omc_t));
+  omc->display = NULL;
+  omc->scr = NULL;
+  omc->dth = NULL;
+  omc->w = DEFAULT_WIDTH;
+  omc->h = DEFAULT_HEIGHT;
+}
 
 void
 omc_uninit (void)
 {
-  if (dth)
-    SDL_KillThread (dth);
-  if (scr)
-    screen_uninit (scr);
+  if (omc->dth)
+    SDL_KillThread (omc->dth);
+  if (omc->scr)
+    screen_uninit (omc->scr);
+
   SDL_Quit ();
+  free (omc);
 }
 
 int
@@ -53,6 +63,8 @@ main (int argc, char **argv)
   SDL_Event event;
   Uint32 bpp;
 
+  omc_init ();
+  
   if (SDL_Init (SDL_INIT_VIDEO) < 0)
   {
     fprintf (stderr, "Unable to init SDL: %s\n", SDL_GetError ());
@@ -93,8 +105,8 @@ main (int argc, char **argv)
   }
 
   printf ("Checking mode %dx%d@%d\n",
-          DEFAULT_WIDTH, DEFAULT_HEIGHT, DEFAULT_DEPTH);
-  bpp = SDL_VideoModeOK (DEFAULT_WIDTH, DEFAULT_HEIGHT, DEFAULT_DEPTH, flags);
+          omc->w, omc->h, DEFAULT_DEPTH);
+  bpp = SDL_VideoModeOK (omc->w, omc->h, DEFAULT_DEPTH, flags);
 
   if (!bpp)
   {
@@ -102,14 +114,14 @@ main (int argc, char **argv)
     omc_uninit ();
   }
 
-  printf ("SDL Recommends %dx%d@%d\n", DEFAULT_WIDTH, DEFAULT_HEIGHT, bpp);
-  display = SDL_SetVideoMode (DEFAULT_WIDTH, DEFAULT_HEIGHT, bpp, flags);
+  printf ("SDL Recommends %dx%d@%d\n", omc->w, omc->h, bpp);
+  omc->display = SDL_SetVideoMode (omc->w, omc->h, bpp, flags);
 
   if (vi->wm_available)
     SDL_WM_SetCaption (DEFAULT_WM_CAPTION, NULL);
 
   /* background thread that handles display and rendering */
-  dth = create_display_thread ();
+  create_display_thread ();
 
   /* init main screen */
   screen_init (SCREEN_TYPE_MAIN);

@@ -17,4 +17,27 @@
  *
  */
 
-void create_display_thread (void);
+#ifndef _OMC_H_
+#define _OMC_H_
+
+#include "config.h"
+
+#include <SDL.h>
+#include <SDL_thread.h>
+
+#include "screens/screen.h"
+
+typedef struct omc_s {
+  SDL_Surface *display;     /* where widgets are displayed */
+  screen_t *scr;            /* current screen */
+  SDL_Thread *dth;          /* display/rendering thread */
+  uint16_t w;
+  uint16_t h;
+} omc_t;
+
+omc_t *omc;
+
+void omc_init (void);
+void omc_uninit (void);
+
+#endif /* _OMC_H_ */
