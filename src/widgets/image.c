@@ -57,7 +57,7 @@ image_load (char *filename, int w, int h)
 }
 
 static int
-widget_image_show (widget_t *widget)
+widget_image_draw (widget_t *widget)
 {
   widget_image_t *priv = (widget_image_t *) widget->priv;
   SDL_Surface *srf;
@@ -70,12 +70,6 @@ widget_image_show (widget_t *widget)
   dst.h = srf->h;
   
   return surface_blit (srf, dst);
-}
-
-static int
-widget_image_hide (widget_t *widget)
-{
-  return -1;
 }
 
 static int
@@ -125,8 +119,7 @@ image_new (char *id, int focusable, int show, int layer,
 
   widget->priv = priv;
 
-  widget->show = widget_image_show;
-  widget->hide = widget_image_hide;
+  widget->draw = widget_image_draw;
   widget->set_focus = NULL;
   widget->action = widget_image_action;
   widget->free = widget_image_free;

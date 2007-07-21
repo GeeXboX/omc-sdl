@@ -71,7 +71,7 @@ display_handler (void *data)
     {
       widget_t **widgets;
       for (widgets = omc->scr->wlist; *widgets; widgets++)
-        widget_show (*widgets);
+        widget_draw (*widgets);
     }    
 
     /* flip screen for double buffering */

@@ -62,7 +62,7 @@ text_create (TTF_Font *font, char *str, int r, int g, int b)
 }
 
 static int
-widget_text_show (widget_t *widget)
+widget_text_draw (widget_t *widget)
 {
   widget_text_t *priv = (widget_text_t *) widget->priv;
   SDL_Rect dst;
@@ -73,12 +73,6 @@ widget_text_show (widget_t *widget)
   dst.h = priv->txt->h;
   
   return surface_blit (priv->txt, dst);
-}
-
-static int
-widget_text_hide (widget_t *widget)
-{
-  return -1;
 }
 
 static int
@@ -129,8 +123,7 @@ text_new (char *id, int focusable, int show, int layer,
 
   widget->priv = priv;
 
-  widget->show = widget_text_show;
-  widget->hide = widget_text_hide;
+  widget->draw = widget_text_draw;
   widget->set_focus = NULL;
   widget->action = widget_text_action;
   widget->free = widget_text_free;

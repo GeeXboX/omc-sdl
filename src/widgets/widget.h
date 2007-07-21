@@ -64,9 +64,8 @@ typedef struct widget_s {
   
   /* widget type specific data */
   void *priv;
-  
-  int (*show) (struct widget_s *widget); /* called to show widget */
-  int (*hide) (struct widget_s *widget); /* called to hide widget */
+
+  int (*draw) (struct widget_s *widget); /* called to draw widget */
   int (*set_focus) (struct widget_s *widget); /* called to set/unset focus */
   int (*action) (struct widget_s *widget, action_event_type_t ev);
   void (*free) (struct widget_s *widget); /* called to free widget */
@@ -75,6 +74,7 @@ typedef struct widget_s {
 widget_t *widget_new (char *id, widget_type_t type, int flags, uint8_t layer,
                       uint16_t x, uint16_t y, uint16_t w, uint16_t h);
 
+int widget_draw (widget_t *widget);
 int widget_show (widget_t *widget);
 int widget_hide (widget_t *widget);
 int widget_set_focus (widget_t *widget, int state);

@@ -44,8 +44,7 @@ widget_new (char *id, widget_type_t type, int flags, uint8_t layer,
 
   widget->focus = NULL;
   widget->priv = NULL;
-  widget->show = NULL;
-  widget->hide = NULL;
+  widget->draw = NULL;
   widget->set_focus = NULL;
   widget->action = NULL;
   widget->free = NULL;
@@ -57,33 +56,51 @@ widget_new (char *id, widget_type_t type, int flags, uint8_t layer,
 }
 
 int
-widget_show (widget_t *widget)
+widget_draw (widget_t *widget)
 {
-  if (!widget || !widget->show)
-    return -1;
-
-  /* show only makes sense when currently hidden */
-  if (!(widget->flags & WIDGET_FLAG_SHOW))
+  if (!widget || !widget->draw)
     return -1;
 
   /* check if widget really needs to be redrawn */
   if (!(widget->flags & WIDGET_FLAG_NEED_REDRAW))
     return -1;
    
-  widget->show (widget);
+  widget->draw (widget);
   widget->flags =~ WIDGET_FLAG_NEED_REDRAW; /* widget has been drawn */
 
-  return -1;
+  return 0;
+}
+
+int
+widget_show (widget_t *widget)
+{
+  if (!widget)
+    return -1;
+
+  /* show only makes sense when currently hidden */
+  if (!(widget->flags & WIDGET_FLAG_SHOW))
+    return -1;
+
+  widget->flags |= WIDGET_FLAG_SHOW; /* show */
+  widget->flags |= WIDGET_FLAG_NEED_REDRAW; /* trigger redraw */
+
+  return 0;
 }
 
 int
 widget_hide (widget_t *widget)
 {
-  if (widget && widget->hide)
-    //if (widget->flags & WIDGET_FLAG_SHOW) /* current state: displayed */
-      return widget->hide (widget);
+  if (!widget)
+    return -1;
 
-  return -1;
+  /* hide only makes sense when currently shown */
+  if (widget->flags & WIDGET_FLAG_SHOW)
+    return -1;
+
+  widget->flags =~ WIDGET_FLAG_SHOW; /* hide */
+  widget->flags |= WIDGET_FLAG_NEED_REDRAW; /* trigger redraw */
+
+  return 0;
 }
 
 int
