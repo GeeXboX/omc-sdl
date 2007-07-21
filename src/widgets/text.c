@@ -79,6 +79,24 @@ widget_text_draw (widget_t *widget)
 }
 
 static int
+widget_text_set_focus (struct widget_s *widget)
+{
+  widget_text_t *priv = (widget_text_t *) widget->priv;
+
+  if (priv->txt)
+    SDL_FreeSurface (priv->txt);
+
+  if (widget_get_flag (widget, WIDGET_FLAG_FOCUSED))
+    priv->txt = text_create (priv->font, priv->str, priv->fcolor);
+  else
+    priv->txt = text_create (priv->font, priv->str, priv->color);
+  
+  widget_set_flag (widget, WIDGET_FLAG_NEED_REDRAW, 1);
+
+  return 0;
+}
+
+static int
 widget_text_action (widget_t *widget, action_event_type_t ev)
 {
   return -1;
@@ -147,7 +165,7 @@ text_new (char *id, int focusable, int show, int layer,
   widget->priv = priv;
 
   widget->draw = widget_text_draw;
-  widget->set_focus = NULL;
+  widget->set_focus = widget_text_set_focus;
   widget->action = widget_text_action;
   widget->free = widget_text_free;
 
