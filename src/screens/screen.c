@@ -109,4 +109,12 @@ screen_add_widget (screen_t *screen, widget_t *widget)
     realloc (screen->wlist, (n + 1) * sizeof (*(screen->wlist)));
   screen->wlist[n] = NULL;
   screen->wlist[n - 1] = widget;
+
+  if (!screen->current && widget_get_flag (widget, WIDGET_FLAG_FOCUSABLE))
+  {
+    /* set focus to first focusable widget */
+    widget_set_focus (widget, 1);
+    screen->current = widget;
+  }
+  
 }
