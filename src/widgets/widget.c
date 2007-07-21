@@ -50,15 +50,28 @@ widget_new (char *id, widget_type_t type, int flags, uint8_t layer,
   widget->action = NULL;
   widget->free = NULL;
 
+  if (flags & WIDGET_FLAG_SHOW)
+    widget->flags |= WIDGET_FLAG_NEED_REDRAW;
+  
   return widget;
 }
 
 int
 widget_show (widget_t *widget)
 {
-  if (widget && widget->show)
-    //if (!(widget->flags & WIDGET_FLAG_SHOW)) /* current state: hidden */
-      return widget->show (widget);
+  if (!widget || !widget->show)
+    return -1;
+
+  /* show only makes sense when currently hidden */
+  if (!(widget->flags & WIDGET_FLAG_SHOW))
+    return -1;
+
+  /* check if widget really needs to be redrawn */
+  if (!(widget->flags & WIDGET_FLAG_NEED_REDRAW))
+    return -1;
+   
+  widget->show (widget);
+  widget->flags =~ WIDGET_FLAG_NEED_REDRAW; /* widget has been drawn */
 
   return -1;
 }
