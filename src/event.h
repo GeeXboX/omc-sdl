@@ -20,6 +20,8 @@
 #ifndef _EVENT_H_
 #define _EVENT_H_
 
+#include <SDL.h>
+
 int default_event_handler (SDL_Event *event);
 
 #endif /* _EVENT_H_ */
