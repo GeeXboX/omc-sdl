@@ -44,7 +44,7 @@ time_left (void)
   return next_time - now;
 }
 
-int
+static int
 display_handler (void *data)
 {
   next_time = SDL_GetTicks() + TICK_INTERVAL;
