@@ -131,7 +131,12 @@ main (int argc, char **argv)
   SDL_EnableKeyRepeat (SDL_DEFAULT_REPEAT_DELAY, SDL_DEFAULT_REPEAT_INTERVAL);
 
   while (SDL_WaitEvent (&event) != 0)
-    default_event_handler (&event);
+  {
+    if (omc->scr && omc->scr->handle_event)
+      omc->scr->handle_event (omc->scr, &event);
+    else
+      default_event_handler (&event);
+  }
 
   return 0;
 }

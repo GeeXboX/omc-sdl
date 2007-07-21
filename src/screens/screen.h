@@ -20,6 +20,7 @@
 #ifndef _SCREEN_H_
 #define _SCREEN_H_
 
+#include <SDL.h>
 #include "widgets/widget.h"
 
 typedef enum {
@@ -30,6 +31,7 @@ typedef struct screen_s {
   screen_type_t type;
   widget_t **wlist;
   void *priv;
+  int (*handle_event) (struct screen_s *screen, SDL_Event *ev);
   void (*uninit) (struct screen_s *screen);
 } screen_t;
 

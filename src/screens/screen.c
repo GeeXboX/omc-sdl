@@ -65,6 +65,7 @@ screen_init (screen_type_t type)
   screen->wlist = (widget_t **) malloc (sizeof (widget_t *));
   *(screen->wlist) = NULL;
   screen->priv = NULL;
+  screen->handle_event = NULL;
   screen->uninit = NULL;
   
   switch (type)
