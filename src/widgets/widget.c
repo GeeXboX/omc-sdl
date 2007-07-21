@@ -114,6 +114,9 @@ widget_set_focus (widget_t *widget, int state)
     return -1;
 
   widget_set_flag (widget, WIDGET_FLAG_FOCUSED, state);
+
+  printf ("Widget '%s' now %s focus.\n", widget->id,
+          widget_get_flag (widget, WIDGET_FLAG_FOCUSED) ? "has" : "lost");
   
   if (widget->set_focus)
     return widget->set_focus (widget);

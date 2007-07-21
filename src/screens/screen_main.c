@@ -73,7 +73,7 @@ screen_main_init (screen_t *screen)
                       0, 0, -1, -1);
   screen_add_widget (screen, banner);
 
-  txt1 = text_new ("playdvd-caption", 0, 1, 2, "Play DVD",
+  txt1 = text_new ("playdvd-caption", 1, 1, 2, "Play DVD",
                    "examples/FreeSans.ttf", 24,
                    0x33, 0x85, 0xF4, 300, 300, -1, -1);
   screen_add_widget (screen, txt1);
