@@ -35,7 +35,15 @@ screen_main_event_handler (screen_t *screen, SDL_Event *ev)
     keysym = ev->key.keysym;
     if (keysym.sym == SDLK_a)
     {
+      widget_t *w;
+      int state;
+      
       printf ("Stroke the A key\n");
+
+      w = widget_get_by_id (screen->wlist, "playdvd-caption");
+      state = widget_get_flag (w, WIDGET_FLAG_FOCUSED);
+      widget_set_focus (w, state ? 0 : 1);
+      
       return 0;
     }
   }

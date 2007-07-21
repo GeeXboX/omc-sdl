@@ -119,7 +119,11 @@ widget_set_focus (widget_t *widget, int state)
           widget_get_flag (widget, WIDGET_FLAG_FOCUSED) ? "has" : "lost");
   
   if (widget->set_focus)
-    return widget->set_focus (widget);
+  {
+    int r = widget->set_focus (widget);
+    widget_set_flag (widget, WIDGET_FLAG_NEED_REDRAW, 1);
+    return r;
+  }
 
   return -1;
 }

@@ -91,8 +91,6 @@ widget_text_set_focus (struct widget_s *widget)
   else
     priv->txt = text_create (priv->font, priv->str, priv->color);
   
-  widget_set_flag (widget, WIDGET_FLAG_NEED_REDRAW, 1);
-
   return 0;
 }
 
