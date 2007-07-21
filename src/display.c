@@ -70,8 +70,12 @@ display_handler (void *data)
     if (omc->scr)
     {
       widget_t **widgets;
-      for (widgets = omc->scr->wlist; *widgets; widgets++)
-        widget_draw (*widgets);
+      int depth;
+
+      for (depth = 0; depth < MAX_DEPTH; depth++)
+        for (widgets = omc->scr->wlist; *widgets; widgets++)
+          if ((*widgets)->layer == depth)
+            widget_draw (*widgets);
     }    
 
     /* flip screen for double buffering */
