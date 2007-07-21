@@ -31,6 +31,17 @@
 
 SDL_Surface *screen;
 screen_t *scr = NULL;
+SDL_Thread *dth = NULL;
+
+void
+omc_uninit (void)
+{
+  if (dth)
+    SDL_KillThread (dth);
+  if (scr)
+    screen_uninit (scr);
+  SDL_Quit ();
+}
 
 int
 main (int argc, char **argv)
@@ -40,13 +51,12 @@ main (int argc, char **argv)
   int flags = SDL_SWSURFACE;
   SDL_Rect **modes;
   SDL_Event event;
-  SDL_Thread *dth = NULL;
   Uint32 bpp;
 
   if (SDL_Init (SDL_INIT_VIDEO) < 0)
   {
     fprintf (stderr, "Unable to init SDL: %s\n", SDL_GetError ());
-    goto sdl_quit;
+    omc_uninit ();
   }
 
   SDL_VideoDriverName (vo_driver, 128);
@@ -68,7 +78,7 @@ main (int argc, char **argv)
   if (modes == (SDL_Rect **) 0)
   {
     fprintf (stderr, "No modes available!\n");
-    goto sdl_quit;
+    omc_uninit ();
   }
 
   /* Check if our resolution is restricted */
@@ -89,7 +99,7 @@ main (int argc, char **argv)
   if (!bpp)
   {
     printf ("Mode not available.\n");
-    goto sdl_quit;
+    omc_uninit ();
   }
 
   printf ("SDL Recommends %dx%d@%d\n", DEFAULT_WIDTH, DEFAULT_HEIGHT, bpp);
@@ -117,19 +127,13 @@ main (int argc, char **argv)
     case SDL_KEYDOWN : // Keyboard Events
       keysym = event.key.keysym;
       if (keysym.sym == SDLK_q)
-        goto sdl_quit;
+        omc_uninit ();
       break;
       
     case SDL_QUIT:
-      goto sdl_quit;
+      omc_uninit ();
     }
   }
 
- sdl_quit:
-  if (dth)
-    SDL_KillThread (dth);
-  if (scr)
-    screen_uninit (scr);
-  SDL_Quit ();
   return 0;
 }
