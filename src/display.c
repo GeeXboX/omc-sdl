@@ -72,9 +72,11 @@ display_handler (void *data)
   return 0;
 }
 
-void
+SDL_Thread *
 create_display_thread (void)
 {
   SDL_Thread *th_display;
   th_display = SDL_CreateThread (display_handler, NULL);
+
+  return th_display;
 }

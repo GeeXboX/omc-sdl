@@ -17,4 +17,4 @@
  *
  */
 
-void create_display_thread (void);
+SDL_Thread *create_display_thread (void);

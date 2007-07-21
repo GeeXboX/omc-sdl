@@ -40,6 +40,7 @@ main (int argc, char **argv)
   int flags = SDL_SWSURFACE;
   SDL_Rect **modes;
   SDL_Event event;
+  SDL_Thread *dth = NULL;
   Uint32 bpp;
 
   if (SDL_Init (SDL_INIT_VIDEO) < 0)
@@ -98,7 +99,7 @@ main (int argc, char **argv)
     SDL_WM_SetCaption (DEFAULT_WM_CAPTION, NULL);
 
   /* background thread that handles display and rendering */
-  create_display_thread ();
+  dth = create_display_thread ();
 
   /* init main screen */
   screen_init (SCREEN_TYPE_MAIN);
@@ -126,6 +127,8 @@ main (int argc, char **argv)
   }
 
  sdl_quit:
+  if (dth)
+    SDL_KillThread (dth);
   if (scr)
     screen_uninit (scr);
   SDL_Quit ();
