@@ -110,6 +110,9 @@ image_new (char *id, int focusable, int show, int layer,
   widget_image_t *priv = NULL;
   int flags = WIDGET_FLAG_NONE;
 
+  if (show)
+    flags |= WIDGET_FLAG_SHOW;
+    
   if (focusable)
     flags |= WIDGET_FLAG_FOCUSABLE;
   
