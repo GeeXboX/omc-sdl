@@ -21,6 +21,8 @@
 #include <SDL_thread.h>
 
 #include "display.h"
+#include "screens/screen.h"
+#include "widgets/widget.h"
 
 #define TICK_INTERVAL 50 /* (20 fps = 1000 / 50ms) */
 
@@ -45,13 +47,19 @@ int
 display_handler (void *data)
 {
   extern SDL_Surface *screen;
+  extern screen_t *scr;
   
   next_time = SDL_GetTicks() + TICK_INTERVAL;
   
   while (1)
   {
     /* update screen composition (i.e. blit surfaces) */
-    /* ... not yet implemented ... */
+    if (scr)
+    {
+      widget_t **widgets;
+      for (widgets = scr->wlist; *widgets; widgets++)
+        widget_show (*widgets);
+    }    
 
     /* flip screen for double buffering */
     SDL_Flip (screen);

@@ -22,6 +22,7 @@
 
 #include "display.h"
 #include "widgets/widget.h"
+#include "screens/screen.h"
 
 #define DEFAULT_WIDTH  1280
 #define DEFAULT_HEIGHT 720
@@ -29,6 +30,7 @@
 #define DEFAULT_WM_CAPTION "GeeXboX Open Media Center"
 
 SDL_Surface *screen;
+screen_t *scr = NULL;
 
 int
 main (int argc, char **argv)
@@ -40,8 +42,6 @@ main (int argc, char **argv)
   SDL_Event event;
   Uint32 bpp;
 
-  widget_t *bg = NULL;
-  
   if (SDL_Init (SDL_INIT_VIDEO) < 0)
   {
     fprintf (stderr, "Unable to init SDL: %s\n", SDL_GetError ());
@@ -99,23 +99,11 @@ main (int argc, char **argv)
 
   /* background thread that handles display and rendering */
   create_display_thread ();
-  
-  bg = image_new ("background", 0, 1, 1, "data/background.png", NULL,
-                  0, 0, -1, -1);
-  widget_show (bg);
 
-  bg = image_new ("banner-top", 0, 1, 1, "data/banner-top.png", NULL,
-                  0, 0, -1, -1);
-  widget_show (bg);
+  /* init main screen */
+  screen_init (SCREEN_TYPE_MAIN);
 
-  bg = text_new("playdvd-caption", 0, 1, 2, "Play DVD", "examples/FreeSans.ttf", 24,
-                0x33, 0x85, 0xF4, 300, 300, -1, -1);
-  widget_show (bg);
 
-  bg = text_new("watchtv-caption", 0, 1, 2, "Watch TV", "examples/FreeSans.ttf", 24,
-                0x33, 0x85, 0xF4, 300, 350, -1, -1);
-  widget_show (bg);
- 
   /* events handling */
   SDL_EnableKeyRepeat (SDL_DEFAULT_REPEAT_DELAY, SDL_DEFAULT_REPEAT_INTERVAL);
 
@@ -138,7 +126,8 @@ main (int argc, char **argv)
   }
 
  sdl_quit:
-  widget_free (bg);
+  if (scr)
+    screen_uninit (scr);
   SDL_Quit ();
   return 0;
 }

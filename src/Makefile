@@ -1,5 +1,5 @@
 SRCDIR := ..
-SUBDIRS := widgets
+SUBDIRS := widgets screens
 
 BIN_NAME := omc
 
@@ -8,6 +8,7 @@ SRCS := \
 	display.c \
 
 DEP_LIBS := \
+	screens/screens.a \
 	widgets/widgets.a \
 
 include $(SRCDIR)/Makefile.common
