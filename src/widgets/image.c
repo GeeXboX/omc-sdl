@@ -23,6 +23,7 @@
 
 #include "omc.h"
 #include "widget.h"
+#include "display.h"
 
 typedef struct widget_image_s {
   SDL_Surface *img;     /* regular image */
@@ -56,45 +57,25 @@ image_load (char *filename, int w, int h)
 }
 
 static int
-surface_blit (widget_t *widget, int x, int y)
+widget_image_show (widget_t *widget)
 {
   widget_image_t *priv = (widget_image_t *) widget->priv;
   SDL_Surface *srf;
-  SDL_Rect src, dest;
-  
-  if (!widget)
-    return -1;
+  SDL_Rect dst;
 
   srf = widget->flags & WIDGET_FLAG_FOCUSED ? priv->fimg : priv->img;
-
-  if (!srf)
-    return -1;
+  dst.x = widget->x;
+  dst.y = widget->y;
+  dst.w = srf->w;
+  dst.h = srf->h;
   
-  src.x = 0;
-  src.y = 0;
-  src.w = srf->w;
-  src.h = srf->h;
-
-  dest = src;
-  dest.x = widget->x;
-  dest.y = widget->y;
-
-  SDL_BlitSurface (srf, &src, omc->display, &dest);
-  SDL_UpdateRect (omc->display, dest.x, dest.y, dest.w, dest.h);
-
-  return 0;
-}
-
-static int
-widget_image_show (widget_t *widget)
-{
-  return surface_blit (widget, widget->x, widget->y);
+  return surface_blit (srf, dst);
 }
 
 static int
 widget_image_hide (widget_t *widget)
 {
-  return surface_blit (widget, 0, 0);
+  return -1;
 }
 
 static int

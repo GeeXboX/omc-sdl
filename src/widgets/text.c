@@ -22,6 +22,7 @@
 
 #include "omc.h"
 #include "widget.h"
+#include "display.h"
 
 typedef struct widget_text_s {
   SDL_Surface *txt;     /* regular text */
@@ -44,36 +45,6 @@ font_load (char *filename, int size, int style)
   return font;
 }
 
-static int
-surface_blit (widget_t *widget, int x, int y)
-{
-  widget_text_t *priv = (widget_text_t *) widget->priv;
-  SDL_Surface *srf;
-  SDL_Rect src, dest;
-
-  if (!widget)
-    return -1;
-
-  srf = priv->txt;
-
-  if (!srf)
-    return -1;
-
-  src.x = 0;
-  src.y = 0;
-  src.w = srf->w;
-  src.h = srf->h;
-
-  dest = src;
-  dest.x = widget->x;
-  dest.y = widget->y;
-
-  SDL_BlitSurface (srf, &src, omc->display, &dest);
-  SDL_UpdateRect (omc->display, dest.x, dest.y, dest.w, dest.h);
-
-  return 0;
-}
-
 static SDL_Surface *
 text_create (TTF_Font *font, char *str, int r, int g, int b)
 {
@@ -93,13 +64,21 @@ text_create (TTF_Font *font, char *str, int r, int g, int b)
 static int
 widget_text_show (widget_t *widget)
 {
-  return surface_blit (widget, widget->x, widget->y);
+  widget_text_t *priv = (widget_text_t *) widget->priv;
+  SDL_Rect dst;
+
+  dst.x = widget->x;
+  dst.y = widget->y;
+  dst.w = priv->txt->w;
+  dst.h = priv->txt->h;
+  
+  return surface_blit (priv->txt, dst);
 }
 
 static int
 widget_text_hide (widget_t *widget)
 {
-  return surface_blit (widget, 0, 0);
+  return -1;
 }
 
 static int

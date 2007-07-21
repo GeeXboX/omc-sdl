@@ -20,6 +20,7 @@
 #ifndef _DISPLAY_H_
 #define _DISPLAY_H_
 
+int surface_blit (SDL_Surface *srf, SDL_Rect offset);
 void create_display_thread (void);
 
 #endif /* _DISPLAY_H_ */

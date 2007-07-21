@@ -44,6 +44,21 @@ time_left (void)
   return next_time - now;
 }
 
+int
+surface_blit (SDL_Surface *srf, SDL_Rect offset)
+{
+  if (!srf)
+    return -1;
+
+  printf ("Blitting Surface on (%d x %d) to (%d x %d)\n",
+          offset.x, offset.y, offset.x + offset.w, offset.y + offset.h);
+  
+  SDL_BlitSurface (srf, NULL, omc->display, &offset);
+  SDL_UpdateRect (omc->display, offset.x, offset.y, offset.w, offset.h);
+
+  return 0;
+}
+
 static int
 display_handler (void *data)
 {
