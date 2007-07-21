@@ -5,6 +5,7 @@ BIN_NAME := omc
 
 SRCS := \
 	omc.c \
+	event.c \
 	display.c \
 
 DEP_LIBS := \

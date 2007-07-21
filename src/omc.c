@@ -21,6 +21,7 @@
 #include <SDL.h>
 
 #include "omc.h"
+#include "event.h"
 #include "display.h"
 #include "widgets/widget.h"
 #include "screens/screen.h"
@@ -130,22 +131,7 @@ main (int argc, char **argv)
   SDL_EnableKeyRepeat (SDL_DEFAULT_REPEAT_DELAY, SDL_DEFAULT_REPEAT_INTERVAL);
 
   while (SDL_WaitEvent (&event) != 0)
-  {
-    SDL_keysym keysym;
-
-    switch (event.type)
-    {
-
-    case SDL_KEYDOWN : // Keyboard Events
-      keysym = event.key.keysym;
-      if (keysym.sym == SDLK_q)
-        omc_uninit ();
-      break;
-      
-    case SDL_QUIT:
-      omc_uninit ();
-    }
-  }
+    default_event_handler (&event);
 
   return 0;
 }
