@@ -17,4 +17,9 @@
  *
  */
 
+#ifndef _DISPLAY_H_
+#define _DISPLAY_H_
+
 void create_display_thread (void);
+
+#endif /* _DISPLAY_H_ */
