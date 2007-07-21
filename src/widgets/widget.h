@@ -85,6 +85,8 @@ int widget_action (widget_t *widget, action_event_type_t ev);
 void widget_free (widget_t *widget);
 
 widget_t *widget_get_by_id (widget_t **list, char *id);
+int widget_set_flag (widget_t *widget, widget_flags_t f, int state);
+int widget_get_flag (widget_t *widget, widget_flags_t f);
 
 typedef struct neighbours_s {
   widget_t *up;

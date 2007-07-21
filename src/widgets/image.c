@@ -63,7 +63,7 @@ widget_image_draw (widget_t *widget)
   SDL_Surface *srf;
   SDL_Rect dst;
 
-  srf = widget->flags & WIDGET_FLAG_FOCUSED ? priv->fimg : priv->img;
+  srf = widget_get_flag (widget, WIDGET_FLAG_FOCUSED) ? priv->fimg : priv->img;
   dst.x = widget->x;
   dst.y = widget->y;
   dst.w = srf->w;
