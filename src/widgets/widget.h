@@ -32,7 +32,8 @@ typedef enum widget_flags {
   WIDGET_FLAG_NONE                  = 0x00,
   WIDGET_FLAG_SHOW                  = 0x01,
   WIDGET_FLAG_FOCUSABLE             = 0x02,
-  WIDGET_FLAG_FOCUSED               = 0x04
+  WIDGET_FLAG_FOCUSED               = 0x04,
+  WIDGET_FLAG_NEED_REDRAW           = 0x08,
 } widget_flags_t;
 
 typedef enum action_event_type {
