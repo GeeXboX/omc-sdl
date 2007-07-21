@@ -36,6 +36,8 @@ widget_new (char *id, widget_type_t type, int flags, uint8_t layer,
   widget->id = strdup (id);
   widget->type = type;
   widget->flags = flags;
+  widget->flags_lock = SDL_CreateMutex ();
+  
   widget->x = x;
   widget->y = y;
   widget->w = w;
@@ -66,8 +68,11 @@ widget_draw (widget_t *widget)
     return -1;
    
   widget->draw (widget);
-  widget->flags =~ WIDGET_FLAG_NEED_REDRAW; /* widget has been drawn */
 
+  SDL_mutexP (widget->flags_lock);
+  widget->flags =~ WIDGET_FLAG_NEED_REDRAW; /* widget has been drawn */
+  SDL_mutexV (widget->flags_lock);
+  
   return 0;
 }
 
@@ -81,9 +86,11 @@ widget_show (widget_t *widget)
   if (!(widget->flags & WIDGET_FLAG_SHOW))
     return -1;
 
+  SDL_mutexP (widget->flags_lock);
   widget->flags |= WIDGET_FLAG_SHOW; /* show */
   widget->flags |= WIDGET_FLAG_NEED_REDRAW; /* trigger redraw */
-
+  SDL_mutexV (widget->flags_lock);
+  
   return 0;
 }
 
@@ -97,9 +104,11 @@ widget_hide (widget_t *widget)
   if (widget->flags & WIDGET_FLAG_SHOW)
     return -1;
 
+  SDL_mutexP (widget->flags_lock);
   widget->flags =~ WIDGET_FLAG_SHOW; /* hide */
   widget->flags |= WIDGET_FLAG_NEED_REDRAW; /* trigger redraw */
-
+  SDL_mutexV (widget->flags_lock);
+  
   return 0;
 }
 
@@ -109,10 +118,12 @@ widget_set_focus (widget_t *widget, int state)
   if (!widget || !(widget->flags & WIDGET_FLAG_FOCUSABLE))
     return -1;
 
+  SDL_mutexP (widget->flags_lock);
   if (state)
     widget->flags |= WIDGET_FLAG_FOCUSED;
   else
     widget->flags &= WIDGET_FLAG_FOCUSED;
+  SDL_mutexV (widget->flags_lock);
   
   if (widget->set_focus)
     return widget->set_focus (widget);
@@ -139,6 +150,9 @@ widget_free (widget_t *widget)
   if (widget->id)
     free (widget->id);
 
+  if (widget->flags_lock)
+    SDL_DestroyMutex (widget->flags_lock);
+  
   if (widget->free)
     widget->free (widget);
 

@@ -20,6 +20,8 @@
 #ifndef _WIDGET_H_
 #define _WIDGET_H_
 
+#include <SDL.h>
+
 #include <inttypes.h>
 
 typedef enum widget_type {
@@ -51,6 +53,7 @@ typedef struct widget_s {
   char *id; /* unique identifier */
   widget_type_t type;
   int flags;
+  SDL_mutex *flags_lock;
   
   /* position and common display properties */
   uint16_t x;
