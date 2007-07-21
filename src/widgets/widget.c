@@ -159,6 +159,21 @@ widget_free (widget_t *widget)
   free (widget);
 }
 
+widget_t *
+widget_get_by_id (widget_t **list, char *id)
+{
+  widget_t **w;
+
+  if (!list)
+    return NULL;
+
+  for (w = list; *w; w++)
+    if (!strcmp ((*w)->id, id))
+      return (*w);
+
+  return NULL;
+}
+
 neighbours_t *
 neighbours_new (void)
 {
