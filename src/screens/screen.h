@@ -29,6 +29,7 @@ typedef enum {
 
 typedef struct screen_s {
   screen_type_t type;
+  widget_t *current; /* widget that has focus */
   widget_t **wlist;
   void *priv;
   int (*handle_event) (struct screen_s *screen, SDL_Event *ev);
