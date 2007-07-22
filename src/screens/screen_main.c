@@ -19,10 +19,32 @@
 
 #include <string.h>
 #include <stdlib.h>
+#include <time.h>
+#include <SDL_thread.h>
 
 #include "event.h"
 #include "screen.h"
 #include "widgets/widget.h"
+
+SDL_Thread *clock_th;
+
+static int
+clock_handler (void *data)
+{
+  widget_t *clock = (widget_t *) data;
+  
+  while (1)
+  {
+    time_t tt = time (NULL);
+    char *t = ctime (&tt);
+    text_set_str (clock, t);
+
+    /* wait for next second */
+    SDL_Delay (1000);
+  }
+
+  return 0;
+}
 
 static int
 screen_main_event_handler (screen_t *screen, SDL_Event *ev)
@@ -55,7 +77,8 @@ screen_main_event_handler (screen_t *screen, SDL_Event *ev)
 static void
 screen_main_uninit (screen_t *screen)
 {
-  /* to be filled in */
+  if (clock_th)
+    SDL_KillThread (clock_th);
 }
 
 void
@@ -65,7 +88,8 @@ screen_main_init (screen_t *screen)
   widget_t *banner = NULL;
   widget_t *txt1 = NULL;
   widget_t *txt2 = NULL;
-
+  widget_t *clock = NULL;
+  
   if (!screen)
     return;
 
@@ -90,4 +114,11 @@ screen_main_init (screen_t *screen)
                    "examples/FreeSans.ttf", 24,
                    0x33, 0x85, 0xF4, 0, 0, 0, 300, 350, -1, -1);
   screen_add_widget (screen, txt2);
+
+  clock = text_new ("clock", 0, 1, 2, "00:00:00",
+                   "examples/FreeSans.ttf", 24,
+                    0xFF, 0xFF, 0xFF, 0, 0, 0, 990, 85, -1, -1);
+  screen_add_widget (screen, clock);
+
+  clock_th = SDL_CreateThread (clock_handler, clock);
 }
