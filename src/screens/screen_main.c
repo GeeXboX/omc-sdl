@@ -78,7 +78,7 @@ void
 screen_main_init (screen_t *screen)
 {
   widget_t *bg = NULL;
-  widget_t *banner = NULL;
+  widget_t *bt = NULL;
   widget_t *txt1 = NULL;
   widget_t *txt2 = NULL;
   widget_t *clock = NULL;
@@ -94,9 +94,9 @@ screen_main_init (screen_t *screen)
                   0, 0, -1, -1);
   screen_add_widget (screen, bg);
 
-  banner = image_new ("banner-top", 0, 1, 1, "data/banner-top.png", NULL,
-                      0, 0, -1, -1);
-  screen_add_widget (screen, banner);
+  bt = image_new ("banner-top", 0, 1, 1, "data/banner-top.png", NULL,
+                  0, 0, -1, -1);
+  screen_add_widget (screen, bt);
 
   txt1 = text_new ("playdvd-caption", 1, 1, 2, "Play DVD",
                    "examples/FreeSans.ttf", 24,
