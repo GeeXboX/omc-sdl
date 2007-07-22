@@ -59,7 +59,7 @@ main (int argc, char **argv)
 {
   const SDL_VideoInfo *vi;
   char vo_driver[128];
-  int flags = SDL_SWSURFACE;
+  int flags = SDL_SWSURFACE | SDL_DOUBLEBUF;
   SDL_Rect **modes;
   SDL_Event event;
   Uint32 bpp;
@@ -81,7 +81,7 @@ main (int argc, char **argv)
   if (vi->hw_available)
   {
     fprintf (stderr, "HW Surfaces enabled\n");
-    flags = SDL_HWSURFACE | SDL_HWPALETTE | SDL_DOUBLEBUF;
+    flags = SDL_HWSURFACE | SDL_HWPALETTE;
   }
 
   printf ("Resolution: %d x %d\n", vi->current_w, vi->current_h);
