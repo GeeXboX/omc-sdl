@@ -26,8 +26,9 @@
 #include "display.h"
 
 typedef struct widget_image_s {
-  SDL_Surface *img;     /* regular image */
-  SDL_Surface *fimg;    /* focused image */
+  SDL_Surface *img;
+  char *name;           /* regular image */
+  char *fname;          /* focused image */
 } widget_image_t;
 
 static SDL_Surface *
@@ -68,20 +69,17 @@ static int
 widget_image_draw (widget_t *widget)
 {
   widget_image_t *priv = (widget_image_t *) widget->priv;
-  SDL_Surface *srf;
   SDL_Rect dst;
 
-  srf = widget_get_flag (widget, WIDGET_FLAG_FOCUSED) ? priv->fimg : priv->img;
-
-  if (!srf)
+  if (!priv->img)
     return -1;
 
   dst.x = widget->x;
   dst.y = widget->y;
-  dst.w = srf->w;
-  dst.h = srf->h;
+  dst.w = priv->img->w;
+  dst.h = priv->img->h;
   
-  return surface_blit (srf, dst);
+  return surface_blit (priv->img, dst);
 }
 
 static int
@@ -102,8 +100,12 @@ widget_image_free (widget_t *widget)
 
   if (priv->img)
     SDL_FreeSurface (priv->img);
-  if (priv->fimg)
-    SDL_FreeSurface (priv->fimg);
+
+  if (priv->name)
+    free (priv->name);
+  if (priv->fname)
+    free (priv->fname);
+  
   free (priv);
 }
 
@@ -126,8 +128,9 @@ image_new (char *id, int focusable, int show, int layer,
 
   priv = malloc (sizeof (widget_image_t));
   printf ("Loading %s\n", name);
-  priv->img = image_load (name, w, h);
-  priv->fimg = image_load (fname, w, h);
+  priv->name = name ? strdup (name) : NULL;
+  priv->fname = fname ? strdup (fname) : NULL;
+  priv->img = image_load (priv->name, w, h);
 
   widget->priv = priv;
 
