@@ -71,7 +71,8 @@ main (int argc, char **argv)
     fprintf (stderr, "Unable to init SDL: %s\n", SDL_GetError ());
     omc_uninit ();
   }
-
+  atexit (SDL_Quit);
+  
   SDL_VideoDriverName (vo_driver, 128);
   printf ("Using Video Driver: %s\n", vo_driver);
   
