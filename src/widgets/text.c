@@ -79,7 +79,7 @@ widget_text_draw (widget_t *widget)
 }
 
 static int
-widget_text_set_focus (struct widget_s *widget)
+widget_text_set_focus (widget_t *widget)
 {
   widget_text_t *priv = (widget_text_t *) widget->priv;
 
