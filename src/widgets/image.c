@@ -83,6 +83,22 @@ widget_image_draw (widget_t *widget)
 }
 
 static int
+widget_image_set_focus (struct widget_s *widget)
+{
+  widget_image_t *priv = (widget_image_t *) widget->priv;
+
+  if (priv->img)
+    SDL_FreeSurface (priv->img);
+
+  if (widget_get_flag (widget, WIDGET_FLAG_FOCUSED))
+    priv->img = image_load (priv->name, widget->w, widget->h);
+  else
+    priv->img = image_load (priv->fname, widget->w, widget->h);
+  
+  return 0;
+}
+
+static int
 widget_image_action (widget_t *widget, action_event_type_t ev)
 {
   return -1;
@@ -135,7 +151,7 @@ image_new (char *id, int focusable, int show, int layer,
   widget->priv = priv;
 
   widget->draw = widget_image_draw;
-  widget->set_focus = NULL;
+  widget->set_focus = widget_image_set_focus;
   widget->action = widget_image_action;
   widget->free = widget_image_free;
 
