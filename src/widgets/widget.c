@@ -208,12 +208,16 @@ widget_set_flag (widget_t *widget, widget_flags_t f, int state)
   {
     widget_t **widgets;
 
+    /* for all widgets from screen ... */
     for (widgets = omc->scr->wlist; *widgets; widgets++)
     {
+      /* select those underneath the current widget ... */
       if ((*widgets != widget) && (*widgets)->layer < widget->layer)
       {
+        /* which share some display area with the current one ... */
         if ((widget->x <= ((*widgets)->x + (*widgets)->w))
             || (widget->y <= ((*widgets)->y + (*widgets)->h)))
+          /* and tells which specific area needs to be redrawn */
           widget_set_redraw_area (*widgets,
                                   widget->x, widget->y, widget->w, widget->h);
       }
