@@ -52,8 +52,15 @@ surface_blit (SDL_Surface *srf, SDL_Rect offset)
 
   printf ("Blitting Surface on (%d x %d) to (%d x %d)\n",
           offset.x, offset.y, offset.x + offset.w, offset.y + offset.h);
+
+  if (SDL_MUSTLOCK (omc->display))
+    SDL_LockSurface (omc->display);
   
   SDL_BlitSurface (srf, NULL, omc->display, &offset);
+
+  if (SDL_MUSTLOCK (omc->display))
+    SDL_UnlockSurface (omc->display);
+
   SDL_UpdateRect (omc->display, offset.x, offset.y, offset.w, offset.h);
 
   return 0;
