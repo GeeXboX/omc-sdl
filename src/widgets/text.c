@@ -169,3 +169,25 @@ text_new (char *id, int focusable, int show, int layer,
 
   return widget;
 }
+
+void
+text_set_str (widget_t *widget, char *str)
+{
+  widget_text_t *priv;
+
+  if (!widget || !str)
+    return;
+  
+  priv = (widget_text_t *) widget->priv;
+  str[strlen (str) - 1] = '\0';
+  
+  if (priv->txt)
+    SDL_FreeSurface (priv->txt);
+
+  if (widget_get_flag (widget, WIDGET_FLAG_FOCUSED))
+    priv->txt = text_create (priv->font, str, priv->fcolor);
+  else
+    priv->txt = text_create (priv->font, str, priv->color);
+  
+  widget_set_flag (widget, WIDGET_FLAG_NEED_REDRAW, 1);
+}

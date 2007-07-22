@@ -135,5 +135,6 @@ widget_t *text_new (char *id, int focusable, int show, int layer,
                     char *name, char *fontname, int size,
                     int r, int g, int b, int rf, int gf, int bf,
                     int x, int y, int w, int h);
+void text_set_str (widget_t *widget, char *str);
 
 #endif /* _WIDGET_H_ */
