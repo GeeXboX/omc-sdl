@@ -20,30 +20,23 @@
 #include <string.h>
 #include <stdlib.h>
 #include <time.h>
-#include <SDL_thread.h>
+#include <SDL_timer.h>
 
 #include "event.h"
 #include "screen.h"
 #include "widgets/widget.h"
 
-SDL_Thread *clock_th;
+SDL_TimerID clock_timer;
 
-static int
-clock_handler (void *data)
+static Uint32
+clock_cb (Uint32 interval, void *param)
 {
-  widget_t *clock = (widget_t *) data;
-  
-  while (1)
-  {
-    time_t tt = time (NULL);
-    char *t = ctime (&tt);
-    text_set_str (clock, t);
+  widget_t *clock = (widget_t *) param;
+  time_t tt = time (NULL);
+  char *t = ctime (&tt);
+  text_set_str (clock, t);
 
-    /* wait for next second */
-    SDL_Delay (1000);
-  }
-
-  return 0;
+  return interval;
 }
 
 static int
@@ -77,8 +70,8 @@ screen_main_event_handler (screen_t *screen, SDL_Event *ev)
 static void
 screen_main_uninit (screen_t *screen)
 {
-  if (clock_th)
-    SDL_KillThread (clock_th);
+  if (clock_timer)
+    SDL_RemoveTimer (clock_timer);
 }
 
 void
@@ -118,7 +111,8 @@ screen_main_init (screen_t *screen)
   clock = text_new ("clock", 0, 1, 2, "00:00:00",
                    "examples/FreeSans.ttf", 24,
                     0xFF, 0xFF, 0xFF, 0, 0, 0, 990, 85, -1, -1);
+  clock_cb (10, clock);
   screen_add_widget (screen, clock);
 
-  clock_th = SDL_CreateThread (clock_handler, clock);
+  clock_timer = SDL_AddTimer (1000, clock_cb, clock);
 }
