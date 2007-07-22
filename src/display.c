@@ -25,7 +25,7 @@
 #include "screens/screen.h"
 #include "widgets/widget.h"
 
-#define TICK_INTERVAL 50 /* (20 fps = 1000 / 50ms) */
+#define TICK_INTERVAL 100 /* (10 fps = 1000 / 100ms) */
 
 static Uint32 next_time;
 
