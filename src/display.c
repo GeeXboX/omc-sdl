@@ -76,8 +76,6 @@ surface_blit (widget_t *widget, SDL_Surface *srf, SDL_Rect offset)
   if (SDL_MUSTLOCK (omc->display))
     SDL_UnlockSurface (omc->display);
 
-  SDL_UpdateRect (omc->display, offset.x, offset.y, offset.w, offset.h);
-  
   return 0;
 }
 
