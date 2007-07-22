@@ -43,6 +43,14 @@ image_load (char *filename, int w, int h)
     return NULL;
   printf ("Loaded a %d x %d image\n", img->w, img->h);
 
+  /* converts surface to display format once for all */
+  img2 = SDL_DisplayFormatAlpha (img);
+  if (img2)
+  {
+    SDL_FreeSurface (img);
+    img = img2;
+  }
+  
   if (w < 0 || h < 0)
     return img;
 
