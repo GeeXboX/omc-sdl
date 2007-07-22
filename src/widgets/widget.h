@@ -130,6 +130,7 @@ void neighbours_free (neighbours_t *nb);
 widget_t *image_new (char *id, int focusable, int show, int layer,
                      char *name, char *fname,
                      int x, int y, int w, int h);
+void image_set_picture (widget_t *widget, char *name);
 
 widget_t *text_new (char *id, int focusable, int show, int layer,
                     char *name, char *fontname, int size,

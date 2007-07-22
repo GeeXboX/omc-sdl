@@ -157,3 +157,21 @@ image_new (char *id, int focusable, int show, int layer,
 
   return widget;
 }
+
+void
+image_set_picture (widget_t *widget, char *name)
+{
+  widget_image_t *priv;
+
+  if (!widget || !name)
+    return;
+  
+  priv = (widget_image_t *) widget->priv;
+  
+  if (priv->img)
+    SDL_FreeSurface (priv->img);
+
+  priv->img = image_load (name, widget->w, widget->h);
+  
+  widget_set_flag (widget, WIDGET_FLAG_NEED_REDRAW, 1);
+}
