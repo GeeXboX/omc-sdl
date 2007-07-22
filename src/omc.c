@@ -19,6 +19,7 @@
 
 #include <stdio.h>
 #include <SDL.h>
+#include <SDL_ttf.h>
 
 #include "omc.h"
 #include "event.h"
@@ -50,6 +51,7 @@ omc_uninit (void)
   if (omc->scr)
     screen_uninit (omc->scr);
 
+  TTF_Quit ();
   SDL_Quit ();
   free (omc);
 }
@@ -72,6 +74,9 @@ main (int argc, char **argv)
     omc_uninit ();
   }
   atexit (SDL_Quit);
+
+  if (!TTF_WasInit ())
+    TTF_Init ();
   
   SDL_VideoDriverName (vo_driver, 128);
   printf ("Using Video Driver: %s\n", vo_driver);
