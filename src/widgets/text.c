@@ -47,7 +47,7 @@ font_load (char *filename, int size, int style)
 }
 
 static SDL_Surface *
-text_create (TTF_Font *font, char *str, SDL_Color color)
+text_create (widget_t *widget, TTF_Font *font, char *str, SDL_Color color)
 {
   SDL_Surface *txt;
 
@@ -58,6 +58,9 @@ text_create (TTF_Font *font, char *str, SDL_Color color)
     return NULL;
   }
 
+  widget->w = txt->w;
+  widget->h = txt->h;
+  
   return txt;
 }
 
@@ -84,9 +87,9 @@ widget_text_set_focus (struct widget_s *widget)
     SDL_FreeSurface (priv->txt);
 
   if (widget_get_flag (widget, WIDGET_FLAG_FOCUSED))
-    priv->txt = text_create (priv->font, priv->str, priv->fcolor);
+    priv->txt = text_create (widget, priv->font, priv->str, priv->fcolor);
   else
-    priv->txt = text_create (priv->font, priv->str, priv->color);
+    priv->txt = text_create (widget, priv->font, priv->str, priv->color);
   
   return 0;
 }
@@ -155,7 +158,7 @@ text_new (char *id, int focusable, int show, int layer,
   priv->fcolor.unused = 255;
   
   priv->str = strdup (name);
-  priv->txt = text_create (priv->font, priv->str, priv->color);
+  priv->txt = text_create (widget, priv->font, priv->str, priv->color);
 
   widget->priv = priv;
 
@@ -182,9 +185,9 @@ text_set_str (widget_t *widget, char *str)
     SDL_FreeSurface (priv->txt);
 
   if (widget_get_flag (widget, WIDGET_FLAG_FOCUSED))
-    priv->txt = text_create (priv->font, str, priv->fcolor);
+    priv->txt = text_create (widget, priv->font, str, priv->fcolor);
   else
-    priv->txt = text_create (priv->font, str, priv->color);
+    priv->txt = text_create (widget, priv->font, str, priv->color);
   
   widget_set_flag (widget, WIDGET_FLAG_NEED_REDRAW, 1);
 }
