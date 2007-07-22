@@ -21,6 +21,7 @@
 #include <stdlib.h>
 #include <string.h>
 
+#include "omc.h"
 #include "widget.h"
 
 widget_t *
@@ -43,7 +44,11 @@ widget_new (char *id, widget_type_t type, int flags, uint8_t layer,
   widget->w = w;
   widget->h = h;
   widget->layer = layer;
-
+  widget->redraw_area.x = 0;
+  widget->redraw_area.y = 0;
+  widget->redraw_area.h = 0;
+  widget->redraw_area.w = 0;
+  
   widget->focus = NULL;
   widget->priv = NULL;
   widget->draw = NULL;
@@ -149,7 +154,7 @@ widget_free (widget_t *widget)
 
   if (widget->flags_lock)
     SDL_DestroyMutex (widget->flags_lock);
-  
+
   if (widget->free)
     widget->free (widget);
 
@@ -171,6 +176,20 @@ widget_get_by_id (widget_t **list, char *id)
   return NULL;
 }
 
+static void
+widget_set_redraw_area (widget_t *widget, int x, int y, int w, int h)
+{
+  if (!widget)
+    return;
+
+  widget->redraw_area.x = x;
+  widget->redraw_area.y = y;
+  widget->redraw_area.w = w;
+  widget->redraw_area.h = h;
+
+  widget_set_flag (widget, WIDGET_FLAG_NEED_REDRAW, 1);
+}
+
 int
 widget_set_flag (widget_t *widget, widget_flags_t f, int state)
 {
@@ -183,6 +202,24 @@ widget_set_flag (widget_t *widget, widget_flags_t f, int state)
   else
     widget->flags =~ f;
   SDL_mutexV (widget->flags_lock);
+
+  /* special care for need redraw flag */
+  if (omc->scr && widget_get_flag (widget, WIDGET_FLAG_NEED_REDRAW))
+  {
+    widget_t **widgets;
+
+    for (widgets = omc->scr->wlist; *widgets; widgets++)
+    {
+      if ((*widgets != widget) && (*widgets)->layer < widget->layer)
+      {
+        if ((widget->x <= ((*widgets)->x + (*widgets)->w))
+            || (widget->y <= ((*widgets)->y + (*widgets)->h)))
+          widget_set_redraw_area (*widgets,
+                                  widget->x, widget->y, widget->w, widget->h);
+      }
+    }
+    
+  }
 
   return 1;
 }

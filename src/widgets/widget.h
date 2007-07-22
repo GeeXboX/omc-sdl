@@ -61,7 +61,8 @@ typedef struct widget_s {
   uint16_t w;
   uint16_t h;
   uint8_t layer;
-
+  SDL_Rect redraw_area; /* widget are that actually needs to be redrawn */
+  
   /* when focused description */
   widget_focus_t *focus;
   

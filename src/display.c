@@ -45,18 +45,33 @@ time_left (void)
 }
 
 int
-surface_blit (SDL_Surface *srf, SDL_Rect offset)
+surface_blit (widget_t *widget, SDL_Surface *srf, SDL_Rect offset)
 {
-  if (!srf)
+  if (!widget || !srf)
     return -1;
 
   printf ("Blitting Surface on (%d x %d) to (%d x %d)\n",
           offset.x, offset.y, offset.x + offset.w, offset.y + offset.h);
-
+  if (widget->redraw_area.x != 0)
+    printf ("where we asked for (%d x %d) to (%d x %d) only\n",
+            widget->redraw_area.x, widget->redraw_area.y,
+            widget->redraw_area.x + widget->redraw_area.w,
+            widget->redraw_area.y + widget->redraw_area.h);
+ 
   if (SDL_MUSTLOCK (omc->display))
     SDL_LockSurface (omc->display);
 
-  SDL_BlitSurface (srf, NULL, omc->display, &offset);
+  if (widget->redraw_area.x != 0)
+  {
+    SDL_BlitSurface (srf, &(widget->redraw_area),
+                     omc->display, &(widget->redraw_area));
+    widget->redraw_area.x = 0;
+    widget->redraw_area.y = 0;
+    widget->redraw_area.w = 0;
+    widget->redraw_area.h = 0;
+  }
+  else
+    SDL_BlitSurface (srf, NULL, omc->display, &offset);
 
   if (SDL_MUSTLOCK (omc->display))
     SDL_UnlockSurface (omc->display);

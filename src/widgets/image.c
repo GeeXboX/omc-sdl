@@ -79,7 +79,7 @@ widget_image_draw (widget_t *widget)
   dst.w = priv->img->w;
   dst.h = priv->img->h;
   
-  return surface_blit (priv->img, dst);
+  return surface_blit (widget, priv->img, dst);
 }
 
 static int

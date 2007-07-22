@@ -75,7 +75,7 @@ widget_text_draw (widget_t *widget)
   dst.w = priv->txt->w;
   dst.h = priv->txt->h;
   
-  return surface_blit (priv->txt, dst);
+  return surface_blit (widget, priv->txt, dst);
 }
 
 static int
