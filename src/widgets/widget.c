@@ -203,7 +203,7 @@ widget_set_flag (widget_t *widget, widget_flags_t f, int state)
     widget->flags =~ f;
   SDL_mutexV (widget->flags_lock);
 
-  /* special care for need redraw flag */
+  /* special care for 'need redraw' flag */
   if (omc->scr && widget_get_flag (widget, WIDGET_FLAG_NEED_REDRAW))
   {
     widget_t **widgets;
