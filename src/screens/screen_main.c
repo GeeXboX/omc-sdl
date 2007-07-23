@@ -80,6 +80,8 @@ screen_main_init (screen_t *screen)
   widget_t *bg = NULL;
   widget_t *bt = NULL;
   widget_t *bb = NULL;
+  widget_t *frame = NULL;
+  widget_t *pics = NULL;
   widget_t *txt1 = NULL;
   widget_t *txt2 = NULL;
   widget_t *clock = NULL;
@@ -102,6 +104,14 @@ screen_main_init (screen_t *screen)
   bb = image_new ("banner-bottom", 0, 1, 1, "data/banner-bottom.png", NULL,
                   0, 720-145, -1, -1);
   screen_add_widget (screen, bb);
+
+  frame = image_new ("frame", 0, 1, 1, "data/frame.png", NULL,
+                     30, 220, 500, 380);
+  screen_add_widget (screen, frame);
+
+  pics = image_new ("menu-pics", 0, 1, 1, "data/image.png", NULL,
+                    1280-600, 135, 600, 480);
+  screen_add_widget (screen, pics);
 
   txt1 = text_new ("playdvd-caption", 1, 1, 2, "Play DVD",
                    "examples/FreeSans.ttf", 24,
