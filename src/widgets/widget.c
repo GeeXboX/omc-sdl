@@ -177,15 +177,15 @@ widget_get_by_id (widget_t **list, char *id)
 }
 
 static void
-widget_set_redraw_area (widget_t *widget, int x, int y, int w, int h)
+widget_set_redraw_area (widget_t *widget, SDL_Rect area)
 {
   if (!widget)
     return;
 
-  widget->redraw_area.x = x;
-  widget->redraw_area.y = y;
-  widget->redraw_area.w = w;
-  widget->redraw_area.h = h;
+  widget->redraw_area.x = area.x;
+  widget->redraw_area.y = area.y;
+  widget->redraw_area.w = area.w;
+  widget->redraw_area.h = area.h;
 
   widget_set_flag (widget, WIDGET_FLAG_NEED_REDRAW, 1);
 }
@@ -321,8 +321,7 @@ widget_set_flag (widget_t *widget, widget_flags_t f, int state)
                   (*widgets)->id,
                   (*widgets)->x, (*widgets)->y, (*widgets)->w, (*widgets)->h,
                   area.x, area.y, area.x + area.w, area.y + area.h);
-          widget_set_redraw_area (*widgets,
-                                  area.x, area.y, area.w, area.h);
+          widget_set_redraw_area (*widgets, area);
         } 
       }
     }
