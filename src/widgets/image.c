@@ -94,6 +94,9 @@ widget_image_set_focus (struct widget_s *widget)
     priv->img = image_load (priv->name, widget->w, widget->h);
   else
     priv->img = image_load (priv->fname, widget->w, widget->h);
+
+  widget->w = priv->img->w;
+  widget->h = priv->img->h;
   
   return 0;
 }
@@ -148,6 +151,9 @@ image_new (char *id, int focusable, int show, int layer,
   priv->fname = fname ? strdup (fname) : NULL;
   priv->img = image_load (priv->name, w, h);
 
+  widget->w = priv->img->w;
+  widget->h = priv->img->h;
+  
   widget->priv = priv;
 
   widget->draw = widget_image_draw;
@@ -172,6 +178,9 @@ image_set_picture (widget_t *widget, char *name)
     SDL_FreeSurface (priv->img);
 
   priv->img = image_load (name, widget->w, widget->h);
+
+  widget->w = priv->img->w;
+  widget->h = priv->img->h;
   
   widget_set_flag (widget, WIDGET_FLAG_NEED_REDRAW, 1);
 }

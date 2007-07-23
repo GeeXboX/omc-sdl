@@ -177,17 +177,109 @@ widget_get_by_id (widget_t **list, char *id)
 }
 
 static void
-widget_set_redraw_area (widget_t *widget, int x, int y, int w, int h)
+widget_set_redraw_area (widget_t *widget, SDL_Rect area)
 {
   if (!widget)
     return;
 
-  widget->redraw_area.x = x;
-  widget->redraw_area.y = y;
-  widget->redraw_area.w = w;
-  widget->redraw_area.h = h;
+  widget->redraw_area.x = area.x;
+  widget->redraw_area.y = area.y;
+  widget->redraw_area.w = area.w;
+  widget->redraw_area.h = area.h;
 
   widget_set_flag (widget, WIDGET_FLAG_NEED_REDRAW, 1);
+}
+
+static int
+widget_share_area (SDL_Rect r1, SDL_Rect r2, SDL_Rect *area)
+{
+  if ((r1.x >= r2.x) && (r1.x <= (r2.x + r2.w)))
+  {
+    if ((r1.x + r1.w) >= (r2.x + r2.w)) // #1, #2, #3, #4
+    {
+      if (r1.y <= r2.y) // #1, #4
+      {
+        if ((r1.y + r1.h) <= (r2.y + r2.h)) // #1
+        {
+          area->x = r1.x;
+          area->y = r2.y;
+          area->w = r2.x + r2.w - r1.x;
+          area->h = r1.y + r1.h - r2.y;
+          return 1;
+        }
+        else // #4
+        {
+          area->x = r1.x;
+          area->y = r2.y;
+          area->w = r2.x + r2.w - r1.x;
+          area->h = r2.h;
+          return 1;
+        }
+      }
+      else // #2, #3
+      {
+        if ((r1.y + r1.h) <= (r2.y + r2.h)) // #2
+        {
+          area->x = r1.x;
+          area->y = r1.y;
+          area->w = r2.x + r2.w - r1.x;
+          area->h = r1.h;
+          return 1;
+        }
+        else // #3
+        {
+          area->x = r1.x;
+          area->y = r1.y;
+          area->w = r2.x + r2.w - r1.x;
+          area->h = r2.y + r2.h - r1.y;
+          return 1;
+        }
+      }
+    }
+    else // #5, #6, #7, #8
+    {
+      if (r1.y <= r2.y) // #5, #7
+      {
+        if ((r1.y + r1.h) <= (r2.y + r2.h)) // #5
+        {
+          area->x = r1.x;
+          area->y = r2.y;
+          area->w = r1.w;
+          area->h = r1.y + r1.h - r2.y;
+          return 1;
+        }
+        else // #7
+        {
+          area->x = r1.x;
+          area->y = r2.y;
+          area->w = r1.w;
+          area->h = r2.h;
+          return 1;
+        }
+      }
+      else // #6, #8
+      {
+        if ((r1.y + r1.h) <= (r2.y + r2.h)) // #8
+        {
+          area->x = r1.x;
+          area->y = r1.y;
+          area->w = r1.w;
+          area->h = r1.h;
+          return 1;
+        }
+        else // #6
+        {
+          area->x = r1.x;
+          area->y = r1.y;
+          area->w = r1.w;
+          area->h = r2.y + r2.h - r1.y;
+          return 1;
+        }
+      }
+    }
+  }
+
+  return 0;
 }
 
 int
@@ -215,11 +307,22 @@ widget_set_flag (widget_t *widget, widget_flags_t f, int state)
       if ((*widgets != widget) && (*widgets)->layer < widget->layer)
       {
         /* which share some display area with the current one ... */
-        if ((widget->x <= ((*widgets)->x + (*widgets)->w))
-            || (widget->y <= ((*widgets)->y + (*widgets)->h)))
-          /* and tells which specific area needs to be redrawn */
-          widget_set_redraw_area (*widgets,
-                                  widget->x, widget->y, widget->w, widget->h);
+        SDL_Rect area;
+        SDL_Rect r1 = { widget->x, widget->y, widget->w, widget->h };
+        SDL_Rect r2 = { (*widgets)->x, (*widgets)->y,
+                        (*widgets)->w, (*widgets)->h };
+        if (widget_share_area (r1, r2, &area)
+            || widget_share_area (r2, r1, &area))
+        {
+          printf ("Common area between %s (%d,%d,%d,%d) and %s (%d,%d,%d,%d)"
+                  " : (%d x %d) - (%d x %d)\n",
+                  widget->id,
+                  widget->x, widget->y, widget->w, widget->h,
+                  (*widgets)->id,
+                  (*widgets)->x, (*widgets)->y, (*widgets)->w, (*widgets)->h,
+                  area.x, area.y, area.x + area.w, area.y + area.h);
+          widget_set_redraw_area (*widgets, area);
+        } 
       }
     }
     
