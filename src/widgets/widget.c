@@ -200,7 +200,7 @@ widget_set_flag (widget_t *widget, widget_flags_t f, int state)
   if (state)
     widget->flags |= f;
   else
-    widget->flags =~ f;
+    widget->flags &= ~f;
   SDL_mutexV (widget->flags_lock);
 
   /* special care for 'need redraw' flag */
