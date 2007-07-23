@@ -195,42 +195,34 @@ widget_share_area (SDL_Rect r1, SDL_Rect r2, SDL_Rect *area)
 {
   if ((r1.x >= r2.x) && (r1.x <= (r2.x + r2.w)))
   {
+    area->x = r1.x;
     if ((r1.x + r1.w) >= (r2.x + r2.w)) // #1, #2, #3, #4
     {
+      area->w = r2.x + r2.w - r1.x;
       if (r1.y <= r2.y) // #1, #4
       {
+        area->y = r2.y;
         if ((r1.y + r1.h) <= (r2.y + r2.h)) // #1
         {
-          area->x = r1.x;
-          area->y = r2.y;
-          area->w = r2.x + r2.w - r1.x;
           area->h = r1.y + r1.h - r2.y;
           return 1;
         }
         else // #4
         {
-          area->x = r1.x;
-          area->y = r2.y;
-          area->w = r2.x + r2.w - r1.x;
           area->h = r2.h;
           return 1;
         }
       }
       else // #2, #3
       {
+        area->y = r1.y;
         if ((r1.y + r1.h) <= (r2.y + r2.h)) // #2
         {
-          area->x = r1.x;
-          area->y = r1.y;
-          area->w = r2.x + r2.w - r1.x;
           area->h = r1.h;
           return 1;
         }
         else // #3
         {
-          area->x = r1.x;
-          area->y = r1.y;
-          area->w = r2.x + r2.w - r1.x;
           area->h = r2.y + r2.h - r1.y;
           return 1;
         }
@@ -238,40 +230,31 @@ widget_share_area (SDL_Rect r1, SDL_Rect r2, SDL_Rect *area)
     }
     else // #5, #6, #7, #8
     {
+      area->w = r1.w;
       if (r1.y <= r2.y) // #5, #7
       {
+        area->y = r2.y;
         if ((r1.y + r1.h) <= (r2.y + r2.h)) // #5
         {
-          area->x = r1.x;
-          area->y = r2.y;
-          area->w = r1.w;
           area->h = r1.y + r1.h - r2.y;
           return 1;
         }
         else // #7
         {
-          area->x = r1.x;
-          area->y = r2.y;
-          area->w = r1.w;
           area->h = r2.h;
           return 1;
         }
       }
       else // #6, #8
       {
+        area->y = r1.y;
         if ((r1.y + r1.h) <= (r2.y + r2.h)) // #8
         {
-          area->x = r1.x;
-          area->y = r1.y;
-          area->w = r1.w;
           area->h = r1.h;
           return 1;
         }
         else // #6
         {
-          area->x = r1.x;
-          area->y = r1.y;
-          area->w = r1.w;
           area->h = r2.y + r2.h - r1.y;
           return 1;
         }
