@@ -254,16 +254,8 @@ widget_share_area (SDL_Rect r1, SDL_Rect r2, SDL_Rect *area)
   r2y1 = r2.y + r2.h;
 
   // check if the rectangles intersect
-  if(/*(r2.x < r1.x) && */(r2x1 < r1.x))
-    return 0;
-
-  if((r2.x > r1x1) /*&& (r2x1 > r1x1)*/)
-    return 0;
-
-  if(/*(r2.y < r1.y) && */(r2y1 < r1.y))
-    return 0;
-
-  if((r2.y > r1y1) /*&& (r2y1 > r1y1)*/)
+  if( (r2x1 < r1.x) || (r2.x > r1x1) ||
+      (r2y1 < r1.y) || (r2.y > r1y1) )
     return 0;
 
   // intersect x
