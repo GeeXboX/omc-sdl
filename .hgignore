@@ -2,3 +2,7 @@ syntax: regexp
 ^config.log
 ^config.h
 ^config.mak
+^.*\.o
+^.*\.a
+^.*\.depend
+^src/omc
