@@ -160,11 +160,47 @@ widget_move_focus (widget_t *widget, neighbours_type_t where)
 }
 
 int
+widget_action_default_cb (widget_t *widget, action_event_type_t ev)
+{
+  if (!widget)
+    return -1;
+  
+  switch (ev)
+  {
+  case ACTION_EVENT_GO_UP:
+    widget_move_focus (widget, NEIGHBOURS_UP);
+    break;
+  case ACTION_EVENT_GO_DOWN:
+    widget_move_focus (widget, NEIGHBOURS_DOWN);
+    break;
+  case ACTION_EVENT_GO_LEFT:
+    widget_move_focus (widget, NEIGHBOURS_LEFT);
+    break;
+  case ACTION_EVENT_GO_RIGHT:
+    widget_move_focus (widget, NEIGHBOURS_RIGHT);
+    break;
+  case ACTION_EVENT_CANCEL:
+    printf ("[%s], cancelling action\n", widget->id);
+    break;
+  case ACTION_EVENT_OK:
+    printf ("[%s], performing action\n", widget->id);
+    break;
+  }
+  
+  return 0;
+}
+
+int
 widget_action (widget_t *widget, action_event_type_t ev)
 {
-  if (widget && widget->action)
+  if (widget)
     if (widget_get_flag (widget, WIDGET_FLAG_FOCUSED)) /* widget has focus */
-      return widget->action (widget, ev);
+    {
+      if (widget->action)
+        return widget->action (widget, ev); /* widget specific action cb */
+      else
+        return widget_action_default_cb (widget, ev); /* generic action cb */
+    }
   
   return -1;
 }

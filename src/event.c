@@ -34,13 +34,15 @@ default_event_handler (SDL_Event *event)
     if (keysym.sym == SDLK_q)
       omc_uninit ();
     else if (keysym.sym == SDLK_UP)
-      widget_move_focus (omc->scr->current, NEIGHBOURS_UP);
+      widget_action (omc->scr->current, ACTION_EVENT_GO_UP);
     else if (keysym.sym == SDLK_DOWN)
-      widget_move_focus (omc->scr->current, NEIGHBOURS_DOWN);
+      widget_action (omc->scr->current, ACTION_EVENT_GO_DOWN);
     else if (keysym.sym == SDLK_LEFT)
-      widget_move_focus (omc->scr->current, NEIGHBOURS_LEFT);
+      widget_action (omc->scr->current, ACTION_EVENT_GO_LEFT);
     else if (keysym.sym == SDLK_RIGHT)
-      widget_move_focus (omc->scr->current, NEIGHBOURS_RIGHT);
+      widget_action (omc->scr->current, ACTION_EVENT_GO_RIGHT);
+    else if (keysym.sym == SDLK_KP_ENTER || keysym.sym == SDLK_RETURN)
+      widget_action (omc->scr->current, ACTION_EVENT_OK);
     break;
       
   case SDL_QUIT:

@@ -97,7 +97,7 @@ widget_text_set_focus (widget_t *widget)
 static int
 widget_text_action (widget_t *widget, action_event_type_t ev)
 {
-  return -1;
+  return widget_action_default_cb (widget, ev);
 }
 
 static void

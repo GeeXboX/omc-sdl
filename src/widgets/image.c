@@ -104,7 +104,7 @@ widget_image_set_focus (struct widget_s *widget)
 static int
 widget_image_action (widget_t *widget, action_event_type_t ev)
 {
-  return -1;
+  return widget_action_default_cb (widget, ev);
 }
 
 static void
