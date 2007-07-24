@@ -50,6 +50,7 @@ widget_new (char *id, widget_type_t type, int flags, uint8_t layer,
   widget->redraw_area.w = 0;
   
   widget->focus = NULL;
+  widget->nb = NULL;
   widget->priv = NULL;
   widget->draw = NULL;
   widget->set_focus = NULL;
@@ -141,24 +142,6 @@ widget_action (widget_t *widget, action_event_type_t ev)
       return widget->action (widget, ev);
   
   return -1;
-}
-
-void
-widget_free (widget_t *widget)
-{
-  if (!widget)
-    return;
-
-  if (widget->id)
-    free (widget->id);
-
-  if (widget->flags_lock)
-    SDL_DestroyMutex (widget->flags_lock);
-
-  if (widget->free)
-    widget->free (widget);
-
-  free (widget);
 }
 
 widget_t *
@@ -326,7 +309,7 @@ widget_get_flag (widget_t *widget, widget_flags_t f)
   return 0;
 }
 
-neighbours_t *
+static neighbours_t *
 neighbours_new (void)
 {
   neighbours_t *nb = NULL;
@@ -340,30 +323,7 @@ neighbours_new (void)
   return nb;
 }
 
-void
-neighbours_set (neighbours_t *nb, widget_t *widget, neighbours_type_t type)
-{
-  if (!nb)
-    return;
-
-  switch (type)
-  {
-  case NEIGHBOURS_UP:
-    nb->up = widget;
-    break;
-  case NEIGHBOURS_DOWN:
-    nb->down = widget;
-    break;
-  case NEIGHBOURS_LEFT:
-    nb->left = widget;
-    break;
-  case NEIGHBOURS_RIGHT:
-    nb->right = widget;
-    break;
-  }
-}
-
-void
+static void
 neighbours_free (neighbours_t *nb)
 {
   if (!nb)
@@ -375,4 +335,51 @@ neighbours_free (neighbours_t *nb)
   nb->right = NULL;
 
   free (nb);
+}
+
+void
+widget_set_neighbour (widget_t *widget, widget_t *w, neighbours_type_t type)
+{
+  if (!widget || !w)
+    return;
+
+  if (!widget->nb)
+    widget->nb = neighbours_new ();
+    
+  switch (type)
+  {
+  case NEIGHBOURS_UP:
+    widget->nb->up = w;
+    break;
+  case NEIGHBOURS_DOWN:
+    widget->nb->down = w;
+    break;
+  case NEIGHBOURS_LEFT:
+    widget->nb->left = w;
+    break;
+  case NEIGHBOURS_RIGHT:
+    widget->nb->right = w;
+    break;
+  }
+}
+
+void
+widget_free (widget_t *widget)
+{
+  if (!widget)
+    return;
+
+  if (widget->id)
+    free (widget->id);
+
+  if (widget->flags_lock)
+    SDL_DestroyMutex (widget->flags_lock);
+
+  if (widget->nb)
+    neighbours_free (widget->nb);
+  
+  if (widget->free)
+    widget->free (widget);
+
+  free (widget);
 }

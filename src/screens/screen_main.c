@@ -123,6 +123,9 @@ screen_main_init (screen_t *screen)
                    0x33, 0x85, 0xF4, 0, 0, 0, 300, 350, -1, -1);
   screen_add_widget (screen, txt2);
 
+  widget_set_neighbour (txt1, txt2, NEIGHBOURS_DOWN);
+  widget_set_neighbour (txt2, txt1, NEIGHBOURS_UP);
+  
   clock = text_new ("clock", 0, 1, 2, "00:00:00",
                    "examples/FreeSans.ttf", 24,
                     0xFF, 0xFF, 0xFF, 0, 0, 0, 990, 85, -1, -1);

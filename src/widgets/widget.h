@@ -48,6 +48,7 @@ typedef enum action_event_type {
 } action_event_type_t;
 
 typedef struct widget_focus_s widget_focus_t;
+typedef struct neighbours_s neighbours_t;
 
 typedef struct widget_s {
   char *id; /* unique identifier */
@@ -65,6 +66,9 @@ typedef struct widget_s {
   
   /* when focused description */
   widget_focus_t *focus;
+
+  /* neighbours list */
+  neighbours_t *nb;
   
   /* widget type specific data */
   void *priv;
@@ -89,12 +93,12 @@ widget_t *widget_get_by_id (widget_t **list, char *id);
 int widget_set_flag (widget_t *widget, widget_flags_t f, int state);
 int widget_get_flag (widget_t *widget, widget_flags_t f);
 
-typedef struct neighbours_s {
+struct neighbours_s {
   widget_t *up;
   widget_t *down;
   widget_t *left;
   widget_t *right;
-} neighbours_t;
+};
 
 typedef enum neighbours_type {
   NEIGHBOURS_UP,
@@ -103,10 +107,8 @@ typedef enum neighbours_type {
   NEIGHBOURS_RIGHT
 } neighbours_type_t;
 
-neighbours_t *neighbours_new (void);
-void neighbours_set (neighbours_t *nb, widget_t *widget,
-                     neighbours_type_t type);
-void neighbours_free (neighbours_t *nb);
+void widget_set_neighbour (widget_t *widget,
+                           widget_t *w, neighbours_type_t type);
 
 /* typedef struct widget_action_s { */
 /*   char *name; */
