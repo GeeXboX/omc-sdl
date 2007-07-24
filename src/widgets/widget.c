@@ -37,7 +37,7 @@ widget_new (char *id, widget_type_t type, int flags, uint8_t layer,
   widget->id = strdup (id);
   widget->type = type;
   widget->flags = flags;
-  widget->flags_lock = SDL_CreateMutex ();
+  widget->lock = SDL_CreateMutex ();
   
   widget->x = x;
   widget->y = y;
@@ -289,12 +289,12 @@ widget_set_flag (widget_t *widget, widget_flags_t f, int state)
   if (!widget)
     return 0;
 
-  SDL_mutexP (widget->flags_lock);
+  SDL_mutexP (widget->lock);
   if (state)
     widget->flags |= f;
   else
     widget->flags &= ~f;
-  SDL_mutexV (widget->flags_lock);
+  SDL_mutexV (widget->lock);
 
   /* special care for 'need redraw' flag */
   if (omc->scr && widget_get_flag (widget, WIDGET_FLAG_NEED_REDRAW))
@@ -428,8 +428,8 @@ widget_free (widget_t *widget)
   if (widget->id)
     free (widget->id);
 
-  if (widget->flags_lock)
-    SDL_DestroyMutex (widget->flags_lock);
+  if (widget->lock)
+    SDL_DestroyMutex (widget->lock);
 
   if (widget->nb)
     neighbours_free (widget->nb);

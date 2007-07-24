@@ -54,7 +54,7 @@ typedef struct widget_s {
   char *id; /* unique identifier */
   widget_type_t type;
   int flags;
-  SDL_mutex *flags_lock;
+  SDL_mutex *lock;
   
   /* position and common display properties */
   uint16_t x;
