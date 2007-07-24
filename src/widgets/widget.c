@@ -49,7 +49,6 @@ widget_new (char *id, widget_type_t type, int flags, uint8_t layer,
   widget->redraw_area.h = 0;
   widget->redraw_area.w = 0;
   
-  widget->focus = NULL;
   widget->nb = NULL;
   widget->priv = NULL;
   widget->draw = NULL;

@@ -64,9 +64,6 @@ typedef struct widget_s {
   uint8_t layer;
   SDL_Rect redraw_area; /* widget are that actually needs to be redrawn */
   
-  /* when focused description */
-  widget_focus_t *focus;
-
   /* neighbours list */
   neighbours_t *nb;
   
@@ -111,25 +108,6 @@ typedef enum neighbours_type {
 
 void widget_set_neighbour (widget_t *widget,
                            widget_t *w, neighbours_type_t type);
-
-/* typedef struct widget_action_s { */
-/*   char *name; */
-/*   action_event_type_t type; */
-/*   Evas_List *params; */
-/* } widget_action_t; */
-
-/* widget_action_t *widget_action_new (char *name, action_event_type_t type); */
-/* void widget_action_free (widget_action_t *action); */
-/* int widget_action_add_param (widget_action_t *action, char *param); */
-
-/* struct widget_focus_s { */
-/*   neighbours_t *neighbours; */
-/*   Evas_List *actions; */
-/* }; */
-
-/* widget_focus_t *widget_focus_new (void); */
-/* void widget_focus_free (widget_focus_t *focus); */
-/* int widget_focus_add_action (widget_focus_t *focus, widget_action_t *action); */
 
 int widget_move_focus (widget_t *widget, neighbours_type_t where);
 
