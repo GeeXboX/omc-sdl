@@ -233,79 +233,49 @@ widget_set_redraw_area (widget_t *widget, SDL_Rect area)
   widget_set_flag (widget, WIDGET_FLAG_NEED_REDRAW, 1);
 }
 
+#define MAX(a,b) ((a) > (b) ? (a) : (b))
+#define MIN(a,b) ((a) > (b) ? (b) : (a))
+
 static int
 widget_share_area (SDL_Rect r1, SDL_Rect r2, SDL_Rect *area)
 {
-  if ((r1.x >= r2.x) && (r1.x <= (r2.x + r2.w)))
-  {
-    area->x = r1.x;
-    if ((r1.x + r1.w) >= (r2.x + r2.w)) // #1, #2, #3, #4
-    {
-      area->w = r2.x + r2.w - r1.x;
-      if (r1.y <= r2.y) // #1, #4
-      {
-        area->y = r2.y;
-        if ((r1.y + r1.h) <= (r2.y + r2.h)) // #1
-        {
-          area->h = r1.y + r1.h - r2.y;
-          return 1;
-        }
-        else // #4
-        {
-          area->h = r2.h;
-          return 1;
-        }
-      }
-      else // #2, #3
-      {
-        area->y = r1.y;
-        if ((r1.y + r1.h) <= (r2.y + r2.h)) // #2
-        {
-          area->h = r1.h;
-          return 1;
-        }
-        else // #3
-        {
-          area->h = r2.y + r2.h - r1.y;
-          return 1;
-        }
-      }
-    }
-    else // #5, #6, #7, #8
-    {
-      area->w = r1.w;
-      if (r1.y <= r2.y) // #5, #7
-      {
-        area->y = r2.y;
-        if ((r1.y + r1.h) <= (r2.y + r2.h)) // #5
-        {
-          area->h = r1.y + r1.h - r2.y;
-          return 1;
-        }
-        else // #7
-        {
-          area->h = r2.h;
-          return 1;
-        }
-      }
-      else // #6, #8
-      {
-        area->y = r1.y;
-        if ((r1.y + r1.h) <= (r2.y + r2.h)) // #8
-        {
-          area->h = r1.h;
-          return 1;
-        }
-        else // #6
-        {
-          area->h = r2.y + r2.h - r1.y;
-          return 1;
-        }
-      }
-    }
-  }
+  int r1x1,r1y1,r2x1,r2y1;
+  int rx0,ry0,rx1,ry1;
 
-  return 0;
+  r1x1 = r1.x + r1.w;
+  r1y1 = r1.y + r1.h;
+
+  r2x1 = r2.x + r2.w;
+  r2y1 = r2.y + r2.h;
+
+  // check if the rectangles intersect
+  if(/*(r2.x < r1.x) && */(r2x1 < r1.x))
+    return 0;
+
+  if((r2.x > r1x1) /*&& (r2x1 > r1x1)*/)
+    return 0;
+
+  if(/*(r2.y < r1.y) && */(r2y1 < r1.y))
+    return 0;
+
+  if((r2.y > r1y1) /*&& (r2y1 > r1y1)*/)
+    return 0;
+
+  // intersect x
+  rx0 = MAX(r1.x, r2.x);
+  rx1 = MIN(r1x1, r2x1);
+
+  // intersect y
+  ry0 = MAX(r1.y, r2.y);
+  ry1 = MIN(r1y1, r2y1);
+
+  // fill in result rect
+  area->x = rx0;
+  area->y = ry0;
+  area->w = rx1 - rx0;
+  area->h = ry1 - ry0;
+
+  return 1;
 }
 
 int
