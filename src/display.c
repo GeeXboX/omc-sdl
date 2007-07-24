@@ -63,7 +63,12 @@ surface_blit (widget_t *widget, SDL_Surface *srf, SDL_Rect offset)
 
   if (widget->redraw_area.x != 0)
   {
-    SDL_BlitSurface (srf, &(widget->redraw_area),
+    offset.x = widget->redraw_area.x - widget->x;
+    offset.y = widget->redraw_area.y - widget->y;
+    offset.w = widget->redraw_area.w;
+    offset.h = widget->redraw_area.h;
+
+    SDL_BlitSurface (srf, &offset,
                      omc->display, &(widget->redraw_area));
     widget->redraw_area.x = 0;
     widget->redraw_area.y = 0;
