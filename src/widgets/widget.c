@@ -233,8 +233,13 @@ widget_set_redraw_area (widget_t *widget, SDL_Rect area)
   widget_set_flag (widget, WIDGET_FLAG_NEED_REDRAW, 1);
 }
 
+#ifndef MAX
 #define MAX(a,b) ((a) > (b) ? (a) : (b))
+#endif
+
+#ifndef MIN
 #define MIN(a,b) ((a) > (b) ? (b) : (a))
+#endif
 
 static int
 widget_share_area (SDL_Rect r1, SDL_Rect r2, SDL_Rect *area)
