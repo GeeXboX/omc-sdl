@@ -134,6 +134,31 @@ widget_set_focus (widget_t *widget, int state)
   return -1;
 }
 
+static widget_t * widget_get_neighbour (widget_t *widget,
+                                        neighbours_type_t type);
+
+int
+widget_move_focus (widget_t *widget, neighbours_type_t where)
+{
+  widget_t *w;
+
+  if (!widget || !widget_get_flag (widget, WIDGET_FLAG_FOCUSED))
+    return -1;
+
+  w = widget_get_neighbour (widget, where);
+  if (!w)
+    return -1;
+
+  /* current widget loose focus */
+  widget_set_focus (widget, 0);
+
+  /* his neighbours gains focus */
+  widget_set_focus (w, 1);
+  omc->scr->current = w;
+
+  return 0;
+}
+
 int
 widget_action (widget_t *widget, action_event_type_t ev)
 {
@@ -361,6 +386,27 @@ widget_set_neighbour (widget_t *widget, widget_t *w, neighbours_type_t type)
     widget->nb->right = w;
     break;
   }
+}
+
+static widget_t *
+widget_get_neighbour (widget_t *widget, neighbours_type_t type)
+{
+  if (!widget || !widget->nb)
+    return NULL;
+
+  switch (type)
+  {
+  case NEIGHBOURS_UP:
+    return widget->nb->up;
+  case NEIGHBOURS_DOWN:
+    return widget->nb->down;
+  case NEIGHBOURS_LEFT:
+    return widget->nb->left;
+  case NEIGHBOURS_RIGHT:
+    return widget->nb->right;
+  }
+
+  return NULL;
 }
 
 void
