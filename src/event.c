@@ -20,6 +20,7 @@
 #include <SDL.h>
 
 #include "omc.h"
+#include "widgets/widget.h"
 
 int
 default_event_handler (SDL_Event *event)
@@ -32,6 +33,14 @@ default_event_handler (SDL_Event *event)
     keysym = event->key.keysym;
     if (keysym.sym == SDLK_q)
       omc_uninit ();
+    else if (keysym.sym == SDLK_UP)
+      widget_move_focus (omc->scr->current, NEIGHBOURS_UP);
+    else if (keysym.sym == SDLK_DOWN)
+      widget_move_focus (omc->scr->current, NEIGHBOURS_DOWN);
+    else if (keysym.sym == SDLK_LEFT)
+      widget_move_focus (omc->scr->current, NEIGHBOURS_LEFT);
+    else if (keysym.sym == SDLK_RIGHT)
+      widget_move_focus (omc->scr->current, NEIGHBOURS_RIGHT);
     break;
       
   case SDL_QUIT:
