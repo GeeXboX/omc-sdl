@@ -225,11 +225,13 @@ widget_set_redraw_area (widget_t *widget, SDL_Rect area)
   if (!widget)
     return;
 
+  SDL_mutexP (widget->lock);
   widget->redraw_area.x = area.x;
   widget->redraw_area.y = area.y;
   widget->redraw_area.w = area.w;
   widget->redraw_area.h = area.h;
-
+  SDL_mutexV (widget->lock);
+  
   widget_set_flag (widget, WIDGET_FLAG_NEED_REDRAW, 1);
 }
 
