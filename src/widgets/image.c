@@ -41,7 +41,10 @@ image_load (char *filename, int w, int h)
   
   img = IMG_Load (filename);
   if (!img)
+  {
+    printf("ERROR: unable to load image file [%s]\n", filename);
     return NULL;
+  }
   printf ("Loaded a %d x %d image\n", img->w, img->h);
 
   /* converts surface to display format once for all */
@@ -94,6 +97,9 @@ widget_image_set_focus (struct widget_s *widget)
     priv->img = image_load (priv->name, widget->w, widget->h);
   else
     priv->img = image_load (priv->fname, widget->w, widget->h);
+
+  if(!priv->img)
+    return 1;
 
   widget->w = priv->img->w;
   widget->h = priv->img->h;
@@ -151,6 +157,9 @@ image_new (char *id, int focusable, int show, int layer,
   priv->fname = fname ? strdup (fname) : NULL;
   priv->img = image_load (priv->name, w, h);
 
+  if(!priv->img)
+    return NULL;
+
   widget->w = priv->img->w;
   widget->h = priv->img->h;
   
@@ -178,6 +187,9 @@ image_set_picture (widget_t *widget, char *name)
     SDL_FreeSurface (priv->img);
 
   priv->img = image_load (name, widget->w, widget->h);
+
+  if(!priv->img)
+    return;
 
   widget->w = priv->img->w;
   widget->h = priv->img->h;

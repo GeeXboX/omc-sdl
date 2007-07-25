@@ -39,7 +39,10 @@ font_load (char *filename, int size, int style)
 
   font = TTF_OpenFont (filename, size);
   if (!font)
+  {
+    printf("ERROR: unable to load font file [%s]\n", filename);
     return NULL;
+  }
 
   TTF_SetFontStyle (font, style);
 
@@ -146,6 +149,9 @@ text_new (char *id, int focusable, int show, int layer,
   priv = malloc (sizeof (widget_text_t));
   printf ("Loading \"%s\"\n", name);
   priv->font = font_load (fontname, size, TTF_STYLE_NORMAL);
+
+  if(!priv->font)
+    return NULL;
 
   priv->color.r = r;
   priv->color.g = g;
