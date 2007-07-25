@@ -244,33 +244,15 @@ widget_set_redraw_area (widget_t *widget, SDL_Rect area)
 static int
 widget_share_area (SDL_Rect r1, SDL_Rect r2, SDL_Rect *area)
 {
-  int r1x1,r1y1,r2x1,r2y1;
-  int rx0,ry0,rx1,ry1;
-
-  r1x1 = r1.x + r1.w;
-  r1y1 = r1.y + r1.h;
-
-  r2x1 = r2.x + r2.w;
-  r2y1 = r2.y + r2.h;
-
   // check if the rectangles intersect
-  if( (r2x1 < r1.x) || (r2.x > r1x1) ||
-      (r2y1 < r1.y) || (r2.y > r1y1) )
+  if( (r2.x + r2.w < r1.x) || (r2.x > r1.x + r1.w) ||
+      (r2.y + r2.h < r1.y) || (r2.y > r1.y + r1.h) )
     return 0;
 
-  // intersect x
-  rx0 = MAX(r1.x, r2.x);
-  rx1 = MIN(r1x1, r2x1);
-
-  // intersect y
-  ry0 = MAX(r1.y, r2.y);
-  ry1 = MIN(r1y1, r2y1);
-
-  // fill in result rect
-  area->x = rx0;
-  area->y = ry0;
-  area->w = rx1 - rx0;
-  area->h = ry1 - ry0;
+  area->x = MAX(r1.x, r2.x);
+  area->y = MAX(r1.y, r2.y);
+  area->w = MIN(r1.x + r1.w, r2.x + r2.w) - area->x;
+  area->h = MIN(r1.y + r1.h, r2.y + r2.h) - area->y;
 
   return 1;
 }
