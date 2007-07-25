@@ -42,7 +42,7 @@ image_load (char *filename, int w, int h)
   img = IMG_Load (filename);
   if (!img)
   {
-    printf("ERROR: unable to load image file [%s]\n", filename);
+    fprintf(stderr, "*** ERROR: %s\n", SDL_GetError());
     return NULL;
   }
   printf ("Loaded a %d x %d image\n", img->w, img->h);

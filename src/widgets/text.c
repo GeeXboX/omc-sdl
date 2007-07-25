@@ -40,7 +40,7 @@ font_load (char *filename, int size, int style)
   font = TTF_OpenFont (filename, size);
   if (!font)
   {
-    printf("ERROR: unable to load font file [%s]\n", filename);
+    fprintf(stderr, "*** ERROR: %s\n", SDL_GetError());
     return NULL;
   }
 
@@ -57,7 +57,7 @@ text_create (widget_t *widget, TTF_Font *font, char *str, SDL_Color color)
   txt = TTF_RenderUTF8_Blended (font, str, color);
   if (!txt)
   {
-    printf (SDL_GetError());
+    fprintf(stderr, "*** ERROR: %s\n", SDL_GetError());
     return NULL;
   }
 
