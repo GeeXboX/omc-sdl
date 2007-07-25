@@ -50,14 +50,6 @@ surface_blit (widget_t *widget, SDL_Surface *srf, SDL_Rect offset)
   if (!widget || !srf)
     return -1;
 
-  printf ("[%s] Blitting Surface on (%d x %d) to (%d x %d)\n", widget->id,
-          offset.x, offset.y, offset.x + offset.w, offset.y + offset.h);
-  if (widget->redraw_area.x != 0)
-    printf ("where we asked for (%d x %d) to (%d x %d) only\n",
-            widget->redraw_area.x, widget->redraw_area.y,
-            widget->redraw_area.x + widget->redraw_area.w,
-            widget->redraw_area.y + widget->redraw_area.h);
- 
   if (SDL_MUSTLOCK (omc->display))
     SDL_LockSurface (omc->display);
 

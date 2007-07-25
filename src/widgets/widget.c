@@ -290,16 +290,7 @@ widget_set_flag (widget_t *widget, widget_flags_t f, int state)
                         (*widgets)->w, (*widgets)->h };
         if (widget_share_area (r1, r2, &area)
             || widget_share_area (r2, r1, &area))
-        {
-          printf ("Common area between %s (%d,%d,%d,%d) and %s (%d,%d,%d,%d)"
-                  " : (%d x %d) - (%d x %d)\n",
-                  widget->id,
-                  widget->x, widget->y, widget->w, widget->h,
-                  (*widgets)->id,
-                  (*widgets)->x, (*widgets)->y, (*widgets)->w, (*widgets)->h,
-                  area.x, area.y, area.x + area.w, area.y + area.h);
           widget_set_redraw_area (*widgets, area);
-        } 
       }
     }
     
