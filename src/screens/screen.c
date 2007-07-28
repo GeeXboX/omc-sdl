@@ -62,7 +62,7 @@ screen_init (screen_type_t type)
   extern void * screen_main_init (screen_t *screen);
 
   screen = malloc (sizeof (screen_t));
-  screen->wlist = (widget_t **) malloc (sizeof (widget_t *));
+  screen->wlist = malloc (sizeof (widget_t *));
   *(screen->wlist) = NULL;
   screen->type = type;
   screen->current = NULL;
@@ -105,8 +105,7 @@ screen_add_widget (screen_t *screen, widget_t *widget)
 
   /* add widget to list */
   n = get_list_length ((void *) screen->wlist) + 1;
-  screen->wlist = (widget_t **)
-    realloc (screen->wlist, (n + 1) * sizeof (*(screen->wlist)));
+  screen->wlist = realloc (screen->wlist, (n + 1) * sizeof (*(screen->wlist)));
   screen->wlist[n] = NULL;
   screen->wlist[n - 1] = widget;
 
