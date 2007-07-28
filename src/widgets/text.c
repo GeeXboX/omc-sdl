@@ -84,8 +84,8 @@ text_create (widget_t *widget, TTF_Font *font, char *str, SDL_Color color)
     return NULL;
   }
 
-  widget->w = txt->w;
-  widget->h = txt->h;
+  if(!widget->w) widget->w = txt->w;
+  if(!widget->h) widget->h = txt->h;
   free (tmp_str);
   
   return txt;
