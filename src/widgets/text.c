@@ -18,6 +18,7 @@
  */
 
 #include <stdlib.h>
+#include <string.h>
 #include <SDL_ttf.h>
 
 #include "omc.h"
@@ -53,16 +54,39 @@ static SDL_Surface *
 text_create (widget_t *widget, TTF_Font *font, char *str, SDL_Color color)
 {
   SDL_Surface *txt;
+  char *tmp_str;
+  int w;
 
-  txt = TTF_RenderUTF8_Blended (font, str, color);
+  TTF_SizeText (font, str, &w, NULL);
+  if (widget->w > 0 && w > widget->w) /* need to clip to fit max width */
+  {
+    int i;
+    
+    tmp_str = malloc (strlen (str));
+
+    for (i = 0; i < strlen (str); i++)
+    {
+      tmp_str[i] = str[i];
+      tmp_str[i+1] = '\0';
+      TTF_SizeText (font, tmp_str, &w, NULL);
+      if (widget->w < w)
+        break;
+    }
+  }
+  else
+    tmp_str = strdup (str);
+
+  txt = TTF_RenderUTF8_Blended (font, tmp_str, color);
   if (!txt)
   {
     fprintf(stderr, "*** ERROR: %s\n", SDL_GetError());
+    free (tmp_str);
     return NULL;
   }
 
   widget->w = txt->w;
   widget->h = txt->h;
+  free (tmp_str);
   
   return txt;
 }
