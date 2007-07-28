@@ -86,7 +86,9 @@ screen_main_init (screen_t *screen)
   widget_t *txt1 = NULL;
   widget_t *txt2 = NULL;
   widget_t *clock = NULL;
-  
+  time_t tt = time (NULL);
+  char *t = ctime (&tt);
+    
   if (!screen)
     return;
 
@@ -129,7 +131,7 @@ screen_main_init (screen_t *screen)
   widget_set_neighbour (txt1, txt2, NEIGHBOURS_DOWN);
   widget_set_neighbour (txt2, txt1, NEIGHBOURS_UP);
   
-  clock = text_new ("clock", 0, 1, 2, "00:00:00",
+  clock = text_new ("clock", 0, 1, 2, t,
                    "examples/FreeSans.ttf", 24,
                     0xFF, 0xFF, 0xFF, 0, 0, 0, 990, 85, 0, 0,
                     NULL, NULL, NULL, NULL);
