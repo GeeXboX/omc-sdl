@@ -45,6 +45,22 @@ time_left (void)
 }
 
 int
+compute_coord (char *coord, int max)
+{
+  int val = 0;
+  char *end;
+  
+  if (!coord)
+    return 0;
+
+  val = strtol (coord, &end, 10);
+  if (*end == '%')
+    val = val * max / 100;
+
+  return val;
+}
+
+int
 surface_blit (widget_t *widget, SDL_Surface *srf, SDL_Rect offset)
 {
   if (!widget || !srf)

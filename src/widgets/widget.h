@@ -113,13 +113,15 @@ int widget_move_focus (widget_t *widget, neighbours_type_t where);
 
 widget_t *image_new (char *id, int focusable, int show, int layer,
                      char *name, char *fname,
-                     int x, int y, int w, int h);
+                     int x, int y, int w, int h,
+                     char *sx, char *sy, char *sw, char *sh);
 void image_set_picture (widget_t *widget, char *name);
 
 widget_t *text_new (char *id, int focusable, int show, int layer,
                     char *name, char *fontname, int size,
                     int r, int g, int b, int rf, int gf, int bf,
-                    int x, int y, int w, int h);
+                    int x, int y, int w, int h,
+                    char *sx, char *sy, char *sw, char *sh);
 void text_set_str (widget_t *widget, char *str);
 
 #endif /* _WIDGET_H_ */

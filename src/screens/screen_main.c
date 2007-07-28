@@ -25,6 +25,7 @@
 #include "event.h"
 #include "screen.h"
 #include "widgets/widget.h"
+#include "omc.h"
 
 SDL_TimerID clock_timer;
 
@@ -94,33 +95,35 @@ screen_main_init (screen_t *screen)
 
   /* populate screen */
   bg = image_new ("background", 0, 1, 1, "data/background.png", NULL,
-                  0, 0, -1, -1);
+                  0, 0, 0, 0, NULL, NULL, "100%", "100%");
   screen_add_widget (screen, bg);
 
   bt = image_new ("banner-top", 0, 1, 1, "data/banner-top.png", NULL,
-                  0, 0, -1, -1);
+                  0, 0, 0, 0, NULL, NULL, "100%", NULL);
   screen_add_widget (screen, bt);
 
   bb = image_new ("banner-bottom", 0, 1, 1, "data/banner-bottom.png", NULL,
-                  0, 720-145, -1, -1);
+                  0, omc->h - 145, 0, 0, NULL, NULL, NULL, NULL);
   screen_add_widget (screen, bb);
 
   frame = image_new ("frame", 0, 1, 1, "data/frame.png", NULL,
-                     30, 220, 500, 380);
+                     30, 220, 500, 380, NULL, NULL, NULL, NULL);
   screen_add_widget (screen, frame);
 
   pics = image_new ("menu-pics", 0, 1, 1, "data/image.png", NULL,
-                    1280-600, 135, 600, 480);
+                    omc->w - 600, 135, 600, 480, NULL, NULL, NULL, NULL);
   screen_add_widget (screen, pics);
 
   txt1 = text_new ("playdvd-caption", 1, 1, 2, "Play DVD",
                    "examples/FreeSans.ttf", 24,
-                   0x33, 0x85, 0xF4, 0x62, 0x23, 0x4E, 300, 300, -1, -1);
+                   0x33, 0x85, 0xF4, 0x62, 0x23, 0x4E, 300, 300, 0, 0,
+                   NULL, NULL, NULL, NULL);
   screen_add_widget (screen, txt1);
 
   txt2 = text_new ("watchtv-caption", 1, 1, 2, "Watch TV",
                    "examples/FreeSans.ttf", 24,
-                   0x33, 0x85, 0xF4, 0x62, 0x23, 0x4E, 300, 350, -1, -1);
+                   0x33, 0x85, 0xF4, 0x62, 0x23, 0x4E, 300, 350, 0, 0,
+                   NULL, NULL, NULL, NULL);
   screen_add_widget (screen, txt2);
 
   widget_set_neighbour (txt1, txt2, NEIGHBOURS_DOWN);
@@ -128,7 +131,8 @@ screen_main_init (screen_t *screen)
   
   clock = text_new ("clock", 0, 1, 2, "00:00:00",
                    "examples/FreeSans.ttf", 24,
-                    0xFF, 0xFF, 0xFF, 0, 0, 0, 990, 85, -1, -1);
+                    0xFF, 0xFF, 0xFF, 0, 0, 0, 990, 85, 0, 0,
+                    NULL, NULL, NULL, NULL);
   clock_cb (10, clock);
   screen_add_widget (screen, clock);
 

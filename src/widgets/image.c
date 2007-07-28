@@ -55,7 +55,7 @@ image_load (char *filename, int w, int h)
     img = img2;
   }
   
-  if (w < 0 || h < 0)
+  if (w <= 0 || h <= 0)
     return img;
 
   /* scaling */
@@ -137,25 +137,32 @@ widget_image_free (widget_t *widget)
 widget_t *
 image_new (char *id, int focusable, int show, int layer,
            char *name, char *fname,
-           int x, int y, int w, int h)
+           int x, int y, int w, int h,
+           char *sx, char *sy, char *sw, char *sh)
 {
   widget_t *widget = NULL;
   widget_image_t *priv = NULL;
   int flags = WIDGET_FLAG_NONE;
-
+  int x2, y2, w2, h2;
+ 
   if (show)
     flags |= WIDGET_FLAG_SHOW;
     
   if (focusable)
     flags |= WIDGET_FLAG_FOCUSABLE;
-  
-  widget = widget_new (id, WIDGET_TYPE_IMAGE, flags, layer, x, y, w, h);
+
+  x2 = sx ? compute_coord (sx, omc->w) : x;
+  y2 = sy ? compute_coord (sy, omc->h) : y;
+  w2 = sw ? compute_coord (sw, omc->w) : w;
+  h2 = sh ? compute_coord (sh, omc->h) : h;
+
+  widget = widget_new (id, WIDGET_TYPE_IMAGE, flags, layer, x2, y2, w2, h2);
 
   priv = malloc (sizeof (widget_image_t));
   printf ("Loading %s\n", name);
   priv->name = name ? strdup (name) : NULL;
   priv->fname = fname ? strdup (fname) : NULL;
-  priv->img = image_load (priv->name, w, h);
+  priv->img = image_load (priv->name, w2, h2);
 
   if(!priv->img)
     return NULL;

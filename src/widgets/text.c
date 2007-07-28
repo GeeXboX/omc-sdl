@@ -129,12 +129,14 @@ widget_t *
 text_new (char *id, int focusable, int show, int layer,
            char *name, char *fontname, int size,
            int r, int g, int b, int rf, int gf, int bf,
-           int x, int y, int w, int h)
+           int x, int y, int w, int h,
+           char *sx, char *sy, char *sw, char *sh)
 {
   widget_t *widget = NULL;
   widget_text_t *priv = NULL;
   int flags = WIDGET_FLAG_NONE;
-
+  int x2, y2, w2, h2;
+  
   if (!fontname || !name)
     return NULL;
   
@@ -144,7 +146,12 @@ text_new (char *id, int focusable, int show, int layer,
   if (focusable)
     flags |= WIDGET_FLAG_FOCUSABLE;
 
-  widget = widget_new (id, WIDGET_TYPE_TEXT, flags, layer, x, y, w, h);
+  x2 = sx ? compute_coord (sx, omc->w) : x;
+  y2 = sy ? compute_coord (sy, omc->h) : y;
+  w2 = sw ? compute_coord (sw, omc->w) : w;
+  h2 = sh ? compute_coord (sh, omc->h) : h;
+  
+  widget = widget_new (id, WIDGET_TYPE_TEXT, flags, layer, x2, y2, w2, h2);
 
   priv = malloc (sizeof (widget_text_t));
   printf ("Loading \"%s\"\n", name);

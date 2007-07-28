@@ -22,6 +22,7 @@
 
 #define MAX_DEPTH 8 /* 0 is farest from screen, typically background */
 
+int compute_coord (char *coord, int max);
 int surface_blit (widget_t *widget, SDL_Surface *srf, SDL_Rect offset);
 void create_display_thread (void);
 
