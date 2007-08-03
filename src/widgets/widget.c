@@ -204,6 +204,17 @@ widget_action (widget_t *widget, action_event_type_t ev)
   return -1;
 }
 
+SDL_Rect
+widget_get_rect (widget_t *widget)
+{
+  if (!widget)
+    return;
+
+  SDL_Rect r = { widget->x, widget->y, widget->w, widget->h };
+
+  return r;
+}
+
 widget_t *
 widget_get_by_id (widget_t **list, char *id)
 {
@@ -285,9 +296,8 @@ widget_set_flag (widget_t *widget, widget_flags_t f, int state)
       {
         /* which share some display area with the current one ... */
         SDL_Rect area;
-        SDL_Rect r1 = { widget->x, widget->y, widget->w, widget->h };
-        SDL_Rect r2 = { (*widgets)->x, (*widgets)->y,
-                        (*widgets)->w, (*widgets)->h };
+        SDL_Rect r1 = widget_get_rect (widget);
+        SDL_Rect r2 = widget_get_rect (*widgets);
         if (widget_share_area (r1, r2, &area)
             || widget_share_area (r2, r1, &area))
           widget_set_redraw_area (*widgets, area);
