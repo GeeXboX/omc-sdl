@@ -69,6 +69,14 @@ surface_blit (widget_t *widget, SDL_Surface *srf, SDL_Rect offset)
   if (SDL_MUSTLOCK (omc->display))
     SDL_LockSurface (omc->display);
 
+  if(widget->parent) {
+    SDL_Rect area, r1, r2;
+    r1 = widget_get_rect(widget);
+    r2 = widget_get_rect(widget->parent);
+    widget_share_area (r1, r2, &area);
+    SDL_SetClipRect (omc->display, &area);
+  }
+
   if (widget->redraw_area.x != 0)
   {
     offset.x = widget->redraw_area.x - widget->x;
@@ -87,6 +95,9 @@ surface_blit (widget_t *widget, SDL_Surface *srf, SDL_Rect offset)
   }
   else
     SDL_BlitSurface (srf, NULL, omc->display, &offset);
+
+  if(widget->parent)
+    SDL_SetClipRect (omc->display, NULL);
 
   if (SDL_MUSTLOCK (omc->display))
     SDL_UnlockSurface (omc->display);

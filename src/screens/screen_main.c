@@ -96,33 +96,33 @@ screen_main_init (screen_t *screen)
   screen->uninit = screen_main_uninit;
 
   /* populate screen */
-  bg = image_new ("background", 0, 1, 1, "data/background.png", NULL,
+  bg = image_new ("background", NULL, 0, 1, 1, "data/background.png", NULL,
                   0, 0, 0, 0, NULL, NULL, "100%", "100%");
   screen_add_widget (screen, bg);
 
-  bt = image_new ("banner-top", 0, 1, 1, "data/banner-top.png", NULL,
+  bt = image_new ("banner-top", bg, 0, 1, 1, "data/banner-top.png", NULL,
                   0, 0, 0, 0, NULL, NULL, "100%", NULL);
   screen_add_widget (screen, bt);
 
-  bb = image_new ("banner-bottom", 0, 1, 1, "data/banner-bottom.png", NULL,
+  bb = image_new ("banner-bottom", bg, 0, 1, 1, "data/banner-bottom.png", NULL,
                   0, omc->h - 145, 0, 0, NULL, NULL, NULL, NULL);
   screen_add_widget (screen, bb);
 
-  frame = image_new ("frame", 0, 1, 1, "data/frame.png", NULL,
+  frame = image_new ("frame", bg, 0, 1, 1, "data/frame.png", NULL,
                      30, 220, 500, 380, NULL, NULL, NULL, NULL);
   screen_add_widget (screen, frame);
 
-  pics = image_new ("menu-pics", 0, 1, 1, "data/image.png", NULL,
+  pics = image_new ("menu-pics", bg, 0, 1, 1, "data/image.png", NULL,
                     omc->w - 600, 135, 600, 480, NULL, NULL, NULL, NULL);
   screen_add_widget (screen, pics);
 
-  txt1 = text_new ("playdvd-caption", 1, 1, 2, "Play DVD",
+  txt1 = text_new ("playdvd-caption", frame, 1, 1, 2, "Play DVD",
                    "examples/FreeSans.ttf", 24,
                    0x33, 0x85, 0xF4, 0x62, 0x23, 0x4E, 300, 300, 0, 0,
                    NULL, NULL, NULL, NULL);
   screen_add_widget (screen, txt1);
 
-  txt2 = text_new ("watchtv-caption", 1, 1, 2, "Watch TV",
+  txt2 = text_new ("watchtv-caption", frame, 1, 1, 2, "Watch TV and have fun!",
                    "examples/FreeSans.ttf", 24,
                    0x33, 0x85, 0xF4, 0x62, 0x23, 0x4E, 300, 350, 0, 0,
                    NULL, NULL, NULL, NULL);
@@ -131,7 +131,7 @@ screen_main_init (screen_t *screen)
   widget_set_neighbour (txt1, txt2, NEIGHBOURS_DOWN);
   widget_set_neighbour (txt2, txt1, NEIGHBOURS_UP);
   
-  clock = text_new ("clock", 0, 1, 2, t,
+  clock = text_new ("clock", bt, 0, 1, 2, t,
                    "examples/FreeSans.ttf", 24,
                     0xFF, 0xFF, 0xFF, 0, 0, 0, 990, 85, 0, 0,
                     NULL, NULL, NULL, NULL);

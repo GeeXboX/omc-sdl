@@ -135,8 +135,8 @@ widget_image_free (widget_t *widget)
 }
 
 widget_t *
-image_new (char *id, int focusable, int show, int layer,
-           char *name, char *fname,
+image_new (char *id, widget_t *parent, int focusable, int show,
+           int layer, char *name, char *fname,
            int x, int y, int w, int h,
            char *sx, char *sy, char *sw, char *sh)
 {
@@ -156,7 +156,8 @@ image_new (char *id, int focusable, int show, int layer,
   w2 = sw ? compute_coord (sw, omc->w) : w;
   h2 = sh ? compute_coord (sh, omc->h) : h;
 
-  widget = widget_new (id, WIDGET_TYPE_IMAGE, flags, layer, x2, y2, w2, h2);
+  widget = widget_new (id, WIDGET_TYPE_IMAGE, parent, flags, layer,
+                       x2, y2, w2, h2);
 
   priv = malloc (sizeof (widget_image_t));
   printf ("Loading %s\n", name);

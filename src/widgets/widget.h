@@ -66,6 +66,7 @@ typedef struct widget_s {
   
   /* neighbours list */
   neighbours_t *nb;
+  struct widget_s *parent;
   
   /* widget type specific data */
   void *priv;
@@ -76,7 +77,7 @@ typedef struct widget_s {
   void (*free) (struct widget_s *widget); /* called to free widget */
 } widget_t;
 
-widget_t *widget_new (char *id, widget_type_t type, int flags, uint8_t layer,
+widget_t *widget_new (char *id, widget_type_t type, widget_t *parent, int flags, uint8_t layer,
                       uint16_t x, uint16_t y, uint16_t w, uint16_t h);
 
 int widget_draw (widget_t *widget);
@@ -88,7 +89,9 @@ void widget_free (widget_t *widget);
 
 int widget_action_default_cb (widget_t *widget, action_event_type_t ev);
 
+SDL_Rect widget_get_rect (widget_t *widget);
 widget_t *widget_get_by_id (widget_t **list, char *id);
+int widget_share_area (SDL_Rect r1, SDL_Rect r2, SDL_Rect *area);
 int widget_set_flag (widget_t *widget, widget_flags_t f, int state);
 int widget_get_flag (widget_t *widget, widget_flags_t f);
 
@@ -111,14 +114,14 @@ void widget_set_neighbour (widget_t *widget,
 
 int widget_move_focus (widget_t *widget, neighbours_type_t where);
 
-widget_t *image_new (char *id, int focusable, int show, int layer,
-                     char *name, char *fname,
+widget_t *image_new (char *id, widget_t *parent, int focusable, int show,
+                     int layer, char *name, char *fname,
                      int x, int y, int w, int h,
                      char *sx, char *sy, char *sw, char *sh);
 void image_set_picture (widget_t *widget, char *name);
 
-widget_t *text_new (char *id, int focusable, int show, int layer,
-                    char *name, char *fontname, int size,
+widget_t *text_new (char *id, widget_t *parent, int focusable, int show,
+                    int layer, char *name, char *fontname, int size,
                     int r, int g, int b, int rf, int gf, int bf,
                     int x, int y, int w, int h,
                     char *sx, char *sy, char *sw, char *sh);

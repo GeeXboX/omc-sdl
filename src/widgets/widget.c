@@ -25,8 +25,8 @@
 #include "widget.h"
 
 widget_t *
-widget_new (char *id, widget_type_t type, int flags, uint8_t layer,
-            uint16_t x, uint16_t y, uint16_t w, uint16_t h)
+widget_new (char *id, widget_type_t type, widget_t *parent, int flags,
+            uint8_t layer, uint16_t x, uint16_t y, uint16_t w, uint16_t h)
 {
   widget_t *widget = NULL;
 
@@ -36,6 +36,7 @@ widget_new (char *id, widget_type_t type, int flags, uint8_t layer,
   widget = malloc (sizeof (widget_t));
   widget->id = strdup (id);
   widget->type = type;
+  widget->parent = parent;
   widget->flags = flags;
   widget->lock = SDL_CreateMutex ();
   
@@ -254,7 +255,7 @@ widget_set_redraw_area (widget_t *widget, SDL_Rect area)
 #define MIN(a,b) ((a) > (b) ? (b) : (a))
 #endif
 
-static int
+int
 widget_share_area (SDL_Rect r1, SDL_Rect r2, SDL_Rect *area)
 {
   // check if the rectangles intersect
