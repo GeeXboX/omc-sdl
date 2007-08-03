@@ -255,8 +255,8 @@ widget_set_redraw_area (widget_t *widget, SDL_Rect area)
 #define MIN(a,b) ((a) > (b) ? (b) : (a))
 #endif
 
-int
-widget_share_area (SDL_Rect r1, SDL_Rect r2, SDL_Rect *area)
+static int
+shared_rect (SDL_Rect r1, SDL_Rect r2, SDL_Rect *area)
 {
   // check if the rectangles intersect
   if( (r2.x + r2.w < r1.x) || (r2.x > r1.x + r1.w) ||
@@ -269,6 +269,17 @@ widget_share_area (SDL_Rect r1, SDL_Rect r2, SDL_Rect *area)
   area->h = MIN(r1.y + r1.h, r2.y + r2.h) - area->y;
 
   return 1;
+}
+
+int
+widget_share_area (widget_t *w1, widget_t *w2, SDL_Rect *area)
+{
+  SDL_Rect r1, r2;
+
+  r1 = widget_get_rect (w1);
+  r2 = widget_get_rect (w2);
+
+  return shared_rect (r1, r2, area);
 }
 
 int
@@ -297,10 +308,8 @@ widget_set_flag (widget_t *widget, widget_flags_t f, int state)
       {
         /* which share some display area with the current one ... */
         SDL_Rect area;
-        SDL_Rect r1 = widget_get_rect (widget);
-        SDL_Rect r2 = widget_get_rect (*widgets);
-        if (widget_share_area (r1, r2, &area)
-            || widget_share_area (r2, r1, &area))
+        if (widget_share_area (widget, *widgets, &area)
+            || widget_share_area (*widgets, widget, &area))
           widget_set_redraw_area (*widgets, area);
       }
     }

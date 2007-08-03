@@ -91,7 +91,7 @@ int widget_action_default_cb (widget_t *widget, action_event_type_t ev);
 
 SDL_Rect widget_get_rect (widget_t *widget);
 widget_t *widget_get_by_id (widget_t **list, char *id);
-int widget_share_area (SDL_Rect r1, SDL_Rect r2, SDL_Rect *area);
+int widget_share_area (widget_t *w1, widget_t *w2, SDL_Rect *area);
 int widget_set_flag (widget_t *widget, widget_flags_t f, int state);
 int widget_get_flag (widget_t *widget, widget_flags_t f);
 

@@ -70,10 +70,8 @@ surface_blit (widget_t *widget, SDL_Surface *srf, SDL_Rect offset)
     SDL_LockSurface (omc->display);
 
   if(widget->parent) {
-    SDL_Rect area, r1, r2;
-    r1 = widget_get_rect(widget);
-    r2 = widget_get_rect(widget->parent);
-    widget_share_area (r1, r2, &area);
+    SDL_Rect area;
+    widget_share_area (widget, widget->parent, &area);
     SDL_SetClipRect (omc->display, &area);
   }
 
